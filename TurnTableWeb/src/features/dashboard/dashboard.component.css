@@ -1,0 +1,12 @@
+article {
+    background-color: aliceblue;
+}
+
+p, h3 {
+    color: black;
+}
+
+article:hover {
+    background-color: lightblue;
+    transition: background-color 150ms linear;
+}

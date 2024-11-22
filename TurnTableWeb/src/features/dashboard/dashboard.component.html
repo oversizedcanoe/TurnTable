@@ -1,0 +1,27 @@
+<div class="grid">
+    @for (game of games; track game) {
+    <article (click)="gameClicked(game.title)">
+        <h3>
+            {{game.title}}
+        </h3>
+        <p>
+            {{game.description}}
+        </p>
+        <p>
+            Players: {{game.playerMin}}
+            @if(game.playerMax != 1){
+            - {{game.playerMax}}
+            }
+        </p>
+        <p>
+            Online:
+            @if(game.online) {
+                ✔
+            }
+            @else { 
+                ❌
+            }
+        </p>
+    </article>
+    }
+</div>
