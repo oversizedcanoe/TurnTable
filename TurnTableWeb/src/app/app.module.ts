@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgxCardsComponent} from 'ngx-cards'
+import { GamesModule } from '../features/games/games.module';
 
 @NgModule({
   declarations: [
@@ -12,7 +12,7 @@ import { NgxCardsComponent} from 'ngx-cards'
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgxCardsComponent
+    GamesModule
   ],
   providers: [],
   bootstrap: [AppComponent]
