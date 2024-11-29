@@ -34,6 +34,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/ngx-cards/assets/cards",
+                "output": "/assets/cards"
               }
             ],
             "styles": [

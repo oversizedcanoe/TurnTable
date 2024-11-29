@@ -6,7 +6,9 @@
     "start": "ng serve --host=127.0.0.1",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "predev": "if exist .angular\\cache rmdir /s /q .angular\\cache",
+    "dev": "ng build && npm unlink ngx-cards && npm link ngx-cards && ng serve --host=127.0.0.1"
   },
   "private": true,
   "dependencies": {
