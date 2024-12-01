@@ -3,9 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurnTableAPI", "TurnTableAPI\TurnTableAPI.csproj", "{B19D9A18-1E89-4F04-A4C9-57C809F15EDE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TurnTableAPI", "TurnTableAPI\TurnTableAPI.csproj", "{B19D9A18-1E89-4F04-A4C9-57C809F15EDE}"
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "TurnTableWeb", "TurnTableWeb\TurnTableWeb.esproj", "{3CC298A7-18DB-4F94-BEA4-000D6531C87C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurnTableDomain", "TurnTableDomain\TurnTableDomain.csproj", "{9DA83F2A-9FBA-4840-B0AC-947D5A8AB58A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurnTableApplication", "TurnTableApplication\TurnTableApplication.csproj", "{D5F8EE28-7950-4332-A09D-FAE98C682DD1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurnTableBase", "TurnTableBase\TurnTableBase.csproj", "{3F78CAED-7DEB-447D-98E1-5ACD68567BBF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +29,18 @@ Global
 		{3CC298A7-18DB-4F94-BEA4-000D6531C87C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3CC298A7-18DB-4F94-BEA4-000D6531C87C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3CC298A7-18DB-4F94-BEA4-000D6531C87C}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{9DA83F2A-9FBA-4840-B0AC-947D5A8AB58A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DA83F2A-9FBA-4840-B0AC-947D5A8AB58A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DA83F2A-9FBA-4840-B0AC-947D5A8AB58A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DA83F2A-9FBA-4840-B0AC-947D5A8AB58A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5F8EE28-7950-4332-A09D-FAE98C682DD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5F8EE28-7950-4332-A09D-FAE98C682DD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5F8EE28-7950-4332-A09D-FAE98C682DD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5F8EE28-7950-4332-A09D-FAE98C682DD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F78CAED-7DEB-447D-98E1-5ACD68567BBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F78CAED-7DEB-447D-98E1-5ACD68567BBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F78CAED-7DEB-447D-98E1-5ACD68567BBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F78CAED-7DEB-447D-98E1-5ACD68567BBF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
