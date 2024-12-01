@@ -1,0 +1,9 @@
+<table>
+@for(row of [].constructor(ROW_COUNT); track $index; let rowIndex = $index){
+    <tr>
+    @for(col of [].constructor(COL_COUNT); track $index; let colIndex = $index){
+        <td (click)="cellClick(rowIndex, colIndex, 1)" id="td{{rowIndex}}-{{colIndex}}"></td>
+    }
+    </tr>
+}
+</table>
