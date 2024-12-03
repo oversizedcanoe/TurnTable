@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TurnTableApplication.Requests;
+using TurnTableDomain;
 
 namespace TurnTableAPI.Controllers
 {
@@ -8,16 +9,18 @@ namespace TurnTableAPI.Controllers
     public class GameController : ControllerBase
     {
         private readonly ILogger<GameController> _logger;
+        private readonly GameManager _gameManager;
 
-        public GameController(ILogger<GameController> logger)
+        public GameController(ILogger<GameController> logger, GameManager gameManager)
         {
-            _logger = logger;
+            this._logger = logger;
+            this._gameManager = gameManager;
         }
 
         [HttpPost]
-        public void New([FromBody] NewGameRequest request)
+        public string New([FromBody] NewGameRequest request)
         {
-
+            return _gameManager.StartNewGame(request.GameType, request.PlayerOneName);
         }
     }
 }

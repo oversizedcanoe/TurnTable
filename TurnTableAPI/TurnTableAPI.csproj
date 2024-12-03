@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TurnTableApplication\TurnTableApplication.csproj" />
+    <ProjectReference Include="..\TurnTableDomain\TurnTableDomain.csproj" />
   </ItemGroup>
 
 </Project>

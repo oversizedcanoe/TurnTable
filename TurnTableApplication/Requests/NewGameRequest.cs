@@ -11,6 +11,6 @@ namespace TurnTableApplication.Requests
     {
         public GameType GameType { get; set; }
 
-        public string PlayerOneName { get; set; }
+        public string PlayerOneName { get; set; } = string.Empty;
     }
 }
