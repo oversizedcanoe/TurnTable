@@ -37,6 +37,23 @@ namespace TurnTableDomain
             return gameCode;
         }
 
+        public bool Move(string gameCode, int playerNumber, object arg1, object arg2, object arg3)
+        {
+            var game = this.Games.FirstOrDefault(g => g.GameCode == gameCode);
+
+            if (game == null)
+            {
+                throw new GameNotFoundException();
+            }
+
+            return game.NewMove(playerNumber, arg1, arg2, arg3);
+        }
+
+        public bool IsGameActive(string gameCode)
+        {
+            return this.Games.Any(g => g.GameCode == gameCode);
+        }
+
         private string GenerateGameCode()
         {
             Random random = new Random();

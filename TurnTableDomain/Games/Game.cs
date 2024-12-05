@@ -23,7 +23,7 @@ namespace TurnTableDomain.Games
             this.Players.Add(player);
         }
 
-        public virtual bool NewMove(object arg1, object arg2, object arg3, object arg4, object arg5)
+        public virtual bool NewMove(int playerNumber, object arg1, object arg2, object arg3)
         {
             throw new NotImplementedException();
         }
