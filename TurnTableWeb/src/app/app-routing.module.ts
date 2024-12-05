@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { Game1Component } from '../features/games/game-1/game-1.component';
+import { ScatComponent } from '../features/games/scat/scat.component';
 import { DashboardComponent } from '../features/dashboard/dashboard.component';
-import { Game3Component } from '../features/games/game-3/game-3.component';
-import { Game4Component } from '../features/games/game-4/game-4.component';
+import { TicTacNoComponent } from '../features/games/tic-tac-no/tic-tac-no.component';
+import { WordTrainComponent } from '../features/games/word-train/word-train.component';
 import { Game5Component } from '../features/games/game-5/game-5.component';
 import { LinkFourComponent } from '../features/games/link-four/link-four.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
-  { path: 'game-1', component: Game1Component },
-  { path: 'link-four', component: LinkFourComponent },
-  { path: 'game-3', component: Game3Component },
-  { path: 'game-4', component: Game4Component },
+  { path: 'scat', component: ScatComponent },
+  { path: 'linkfour', component: LinkFourComponent },
+  { path: 'tictacno', component: TicTacNoComponent },
+  { path: 'wordtrain', component: WordTrainComponent },
   { path: 'game-5', component: Game5Component },
 ];
 
