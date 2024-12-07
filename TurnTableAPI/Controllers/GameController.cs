@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TurnTableApplication.Requests;
 using TurnTableBase;
-using TurnTableDomain;
 using TurnTableAPI.ActionFilters;
 using TurnTableApplication.DTOs;
+using TurnTableDomain.Services;
 
 namespace TurnTableAPI.Controllers
 {
@@ -26,7 +26,25 @@ namespace TurnTableAPI.Controllers
         {
             try
             {
-                string gameCode = _gameManager.StartNewGame(request.GameType, request.PlayerOneName);
+                string gameCode = _gameManager.StartNewGame(request.GameType, request.PlayerOneName, GetBackendAddress());
+
+                return Ok(new NewGameDTO(gameCode));
+            }
+            catch (Exception ex)
+            {
+                return Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPost]
+        [ServiceFilter(typeof(ValidGameCodeFilter))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<bool> Join([FromBody] JoinGameRequest request)
+        {
+            try
+            {
+                string gameCode = _gameManager.JoinGame(request.GameCode, request.PlayerName);
 
                 return Ok(new NewGameDTO(gameCode));
             }

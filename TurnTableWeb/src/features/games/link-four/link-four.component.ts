@@ -37,6 +37,7 @@ export class LinkFourComponent implements OnInit {
   async onJoinClicked() {
     // const gameCode = await this.gameService.newGame(GameType.LinkFour, this.playerOneName);
     // this.gameCode = gameCode;
+    
   }
 
   isButtonDisabled_Join(){

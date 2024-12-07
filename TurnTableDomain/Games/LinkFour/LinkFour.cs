@@ -1,4 +1,5 @@
 ﻿using TurnTableBase;
+using TurnTableDomain.Models;
 
 namespace TurnTableDomain.Games.LinkFour
 {
@@ -11,7 +12,7 @@ namespace TurnTableDomain.Games.LinkFour
 
         private int[][] _gameBoard = new int[ROW_COUNT][];
 
-        public LinkFour(string gameCode, Player playerOne) : base(gameCode, playerOne)
+        public LinkFour(string gameCode, Player playerOne, string updateEndpoint) : base(gameCode, playerOne, updateEndpoint)
         {
             for (int i = 0; i < ROW_COUNT; i++)
             {
@@ -44,6 +45,8 @@ namespace TurnTableDomain.Games.LinkFour
 
         private void ProcessMove(int playerNumber, int columnIndex)
         {
+            UpdateLastActiveDate();
+
             // Get largest row index (closest row to the bottom) that is 0 for the given columnIndex
             int largestRowIndex = -1;
 

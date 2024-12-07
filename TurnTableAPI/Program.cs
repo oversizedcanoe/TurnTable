@@ -1,5 +1,5 @@
 using TurnTableAPI.ActionFilters;
-using TurnTableDomain;
+using TurnTableDomain.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

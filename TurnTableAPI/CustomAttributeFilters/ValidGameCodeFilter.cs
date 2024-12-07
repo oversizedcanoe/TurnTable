@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using TurnTableApplication.Requests;
-using TurnTableBase;
-using TurnTableDomain;
+using TurnTableDomain.Services;
 
 namespace TurnTableAPI.ActionFilters
 {
@@ -41,7 +40,7 @@ namespace TurnTableAPI.ActionFilters
 
         private string GetGameCodeFromRequest(ActionExecutingContext context)
         {
-            if (context.ActionArguments["request"] is MoveRequest request)
+            if (context.ActionArguments["request"] is BaseGameRequest request)
             {
                 return request.GameCode;
             }

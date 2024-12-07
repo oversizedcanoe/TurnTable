@@ -1,4 +1,4 @@
-﻿namespace TurnTableDomain
+﻿namespace TurnTableDomain.Models
 {
     public class Player
     {
@@ -7,8 +7,8 @@
 
         public Player(int playerNumber, string name)
         {
-            this.PlayerNumber = playerNumber;
-            this.Name = name;
+            PlayerNumber = playerNumber;
+            Name = name;
         }
     }
 }
