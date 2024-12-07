@@ -21,15 +21,15 @@ namespace TurnTableDomain.Games.LinkFour
             }
         }
 
-        public override bool NewMove(int playerNumber, object arg1, object arg2, object arg3)
+        public override MoveResultCode NewMove(int playerNumber, object arg1, object arg2, object arg3)
         {
             int columnNumber = Convert.ToInt32(arg1);
 
             ProcessMove(playerNumber, columnNumber);
 
-            // todo, need to figure out how to send back a win result and not just "true/false"
-
-            return true;
+            MoveResultCode resultCode = CheckForWin();
+            
+            return resultCode;
         }
 
         private int GetNumberAtPosition(int rowNumber, int colNumber)
@@ -40,8 +40,6 @@ namespace TurnTableDomain.Games.LinkFour
         private void SetPosition(int rowNumber, int colNumber, int playerNumber)
         {
             _gameBoard[rowNumber][colNumber] = playerNumber;
-
-            CheckForWin();
         }
 
         private void ProcessMove(int playerNumber, int columnIndex)
@@ -68,9 +66,10 @@ namespace TurnTableDomain.Games.LinkFour
             SetPosition(largestRowIndex, columnIndex, playerNumber);
         }
 
-        private void CheckForWin()
+        private MoveResultCode CheckForWin()
         {
-
+            // TODO
+            return MoveResultCode.NextTurn;
         }
     }
 }

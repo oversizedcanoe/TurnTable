@@ -42,11 +42,11 @@ namespace TurnTableAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<bool> Move([FromBody] MoveRequest request)
+        public ActionResult<MoveResultCode> Move([FromBody] MoveRequest request)
         {
             try
             {
-                bool result = _gameManager.Move(request.GameCode, request.PlayerNumber, request.Arg1, request.Arg2, request.Arg3);
+                MoveResultCode result = _gameManager.Move(request.GameCode, request.PlayerNumber, request.Arg1, request.Arg2, request.Arg3);
 
                 return Ok(result);
             }

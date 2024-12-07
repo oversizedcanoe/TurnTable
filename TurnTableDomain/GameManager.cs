@@ -37,7 +37,7 @@ namespace TurnTableDomain
             return gameCode;
         }
 
-        public bool Move(string gameCode, int playerNumber, object arg1, object arg2, object arg3)
+        public MoveResultCode Move(string gameCode, int playerNumber, object arg1, object arg2, object arg3)
         {
             var game = this.Games.FirstOrDefault(g => g.GameCode == gameCode);
 
