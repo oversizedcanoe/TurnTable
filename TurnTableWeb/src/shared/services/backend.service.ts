@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { lastValueFrom, Observable } from 'rxjs';
 
@@ -6,36 +6,45 @@ import { lastValueFrom, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class BackendService {
-  baseUrl: string = 'https://localhost:7084/api/'
+  baseUrl: string = 'https://192.168.2.34:7282/api/'
   constructor(public httpClient: HttpClient) {
   }
 
-//   async get<T>(url: string): Promise<T> {
-//     const result$ = this.httpClient.get(this.baseUrl + url, { observe: 'response'});
-//     const result = await lastValueFrom(result$);
+  //   async get<T>(url: string): Promise<T> {
+  //     const result$ = this.httpClient.get(this.baseUrl + url, { observe: 'response'});
+  //     const result = await lastValueFrom(result$);
 
-//     if (result.ok) {
-//       return result.body as T;
-//     }
-//     else {
-//       alert(`Error ${result.status}: ${result.statusText}`)
-//       console.error(result);
-//       return new ApiError(result.statusText, result.status)
-//     }
-//   }
+  //     if (result.ok) {
+  //       return result.body as T;
+  //     }
+  //     else {
+  //       alert(`Error ${result.status}: ${result.statusText}`)
+  //       console.error(result);
+  //       return new ApiError(result.statusText, result.status)
+  //     }
+  //   }
 
   async post<T>(url: string, body: {} = {}): Promise<T | null> {
-    console.log(body, typeof body);
-    const result$ = this.httpClient.post<T>(this.baseUrl + url, body, { observe: 'response'});
-    const result = await lastValueFrom(result$);
-    
-    if (result.ok) {
+    const result$ = this.httpClient.post<T>(this.baseUrl + url, body, { observe: 'response' });
+
+    try {
+      const result = await lastValueFrom(result$);
       return result.body as T;
     }
-    else {
-      alert(`Error ${result.status}: ${result.statusText}`)
-      console.error(result);
-      return null ;//new ApiError(result.statusText, result.status)
+    catch (error) {
+        this.handleError(error);
+    }
+
+    return null;
+  }
+
+  handleError(error: any){
+    console.error(error);
+
+    if(error instanceof HttpErrorResponse){
+      alert(`Sorry, an error occurred (HTTP ${error.status})`);
+    } else {
+      alert('Unknown error');
     }
   }
 }

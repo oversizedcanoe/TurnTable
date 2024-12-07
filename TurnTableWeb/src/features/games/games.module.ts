@@ -6,13 +6,15 @@ import { TicTacNoComponent } from './tic-tac-no/tic-tac-no.component';
 import { WordTrainComponent } from './word-train/word-train.component';
 import { Game5Component } from './game-5/game-5.component';
 import { NgxCardsComponent } from 'ngx-cards';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
   declarations: [ScatComponent, LinkFourComponent, TicTacNoComponent, WordTrainComponent, Game5Component],
   imports: [
     CommonModule,
-    NgxCardsComponent
+    NgxCardsComponent,
+    FormsModule
   ],
   exports: [ScatComponent, LinkFourComponent, TicTacNoComponent, WordTrainComponent, Game5Component],
 })

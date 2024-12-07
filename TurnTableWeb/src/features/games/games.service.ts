@@ -6,22 +6,26 @@ import { GameType } from '../../shared/models/enums';
     providedIn: 'root'
 })
 
-export class KeyService {
-    url: string = 'game';
+export class GameService {
+    private url: string = 'game';
 
-    constructor(public backendService: BackendService) { }
+    constructor(private backendService: BackendService) { }
 
     async newGame(gameType: GameType, playerOneName: string): Promise<string> {
         var body = { gameType: gameType, playerOneName: playerOneName };
 
-        const result = await this.backendService.post<string>(this.url + '/new', body);
-
         let newGameCode: string = ''
 
+        const result = await this.backendService.post<NewGameDTO>(this.url + '/new', body);
+
         if (result != null) {
-            newGameCode = result;
+            newGameCode = result.gameCode;
         }
 
         return newGameCode;
     }
+}
+
+class NewGameDTO {
+    public gameCode: string = '';
 }

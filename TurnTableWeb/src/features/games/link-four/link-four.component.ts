@@ -1,21 +1,46 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { GameService } from '../games.service';
+import { GameType } from '../../../shared/models/enums';
 
 @Component({
   selector: 'app-link-four',
   templateUrl: './link-four.component.html',
   styleUrl: './link-four.component.css'
 })
-export class LinkFourComponent {
+export class LinkFourComponent implements OnInit {
+  public gameCode: string = '';
+  public gameCodeToJoin: string = ''
+  public playerOneName: string = '';
+  
   public readonly ROW_COUNT: number = 6;
   public readonly COL_COUNT: number = 7;
-  gameBoard: number[][];
+  private gameBoard: number[][];
 
-  constructor() {
+  constructor(private gameService: GameService) {
     this.gameBoard = [];
-
+  }
+  ngOnInit(): void {
     for (let i = 0; i < this.ROW_COUNT; i++) {
       this.gameBoard[i] = Array<number>(this.COL_COUNT).fill(0);
     }
+  }
+
+  async onStartClicked() {
+    const gameCode = await this.gameService.newGame(GameType.LinkFour, this.playerOneName);
+    this.gameCode = gameCode;
+  }
+
+  isButtonDisabled_Start(){
+    return this.playerOneName == '';
+  }
+
+  async onJoinClicked() {
+    // const gameCode = await this.gameService.newGame(GameType.LinkFour, this.playerOneName);
+    // this.gameCode = gameCode;
+  }
+
+  isButtonDisabled_Join(){
+    return this.playerOneName == '' || this.gameCodeToJoin == '';
   }
 
   getNumberAtPosition(rowNumber: number, colNumber: number): number {
@@ -37,8 +62,6 @@ export class LinkFourComponent {
     }
 
     this.gameBoard[rowNumber][colNumber] = playerNumber;
-
-    this.checkForWin();
   }
 
   cellClick(rowIndex: number, colIndex: number, playerNumber: 1 | 2): void {
@@ -60,9 +83,5 @@ export class LinkFourComponent {
     else {
       this.setCell(largestRowIndex, colIndex, playerNumber);
     }
-  }
-
-  checkForWin(): void{
-    //todo
   }
 }

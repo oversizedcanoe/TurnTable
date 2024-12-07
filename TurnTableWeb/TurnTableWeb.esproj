@@ -8,6 +8,7 @@
     <BuildOutputFolder>$(MSBuildProjectDirectory)\dist\TurnTableWeb\browser\</BuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="src\games\" />
+    <None Remove="src\games\**" />
+    <TypeScriptConfiguration Remove="src\games\**" />
   </ItemGroup>
 </Project>

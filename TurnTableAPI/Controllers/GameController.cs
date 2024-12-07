@@ -3,12 +3,13 @@ using TurnTableApplication.Requests;
 using TurnTableBase;
 using TurnTableDomain;
 using TurnTableAPI.ActionFilters;
+using TurnTableApplication.DTOs;
 
 namespace TurnTableAPI.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class GameController : ControllerBase
+    public class GameController : BaseController
     {
         private readonly ILogger<GameController> _logger;
         private readonly GameManager _gameManager;
@@ -21,18 +22,17 @@ namespace TurnTableAPI.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<string> New([FromBody] NewGameRequest request)
+        public ActionResult<NewGameDTO> New([FromBody] NewGameRequest request)
         {
             try
             {
                 string gameCode = _gameManager.StartNewGame(request.GameType, request.PlayerOneName);
 
-                return Ok(gameCode);
+                return Ok(new NewGameDTO(gameCode));
             }
             catch (Exception ex)
             {
                 return Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError);
-
             }
         }
 

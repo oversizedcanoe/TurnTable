@@ -42,3 +42,7 @@ table {
 .two {
     background-color: blue;
 }
+
+button {
+    margin-bottom: 1rem
+}

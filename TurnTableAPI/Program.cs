@@ -11,6 +11,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<GameManager>();
 builder.Services.AddScoped<ValidGameCodeFilter>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "AllowLocalhost",
+        policy =>
+        {
+            policy.WithOrigins("https://localhost:7282", "http://localhost:4200", "http://192.168.2.34:4200")
+            .AllowAnyHeader().AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -25,5 +36,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("AllowLocalhost");
 
 app.Run();
