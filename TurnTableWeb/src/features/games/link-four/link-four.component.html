@@ -5,7 +5,7 @@
 
 <form>
     <fieldset role="group">
-      <input type="text" name="name" placeholder="Enter your name" [(ngModel)]="playerOneName" />
+      <input type="text" name="name" placeholder="Enter your name" [(ngModel)]="playerName" />
       <input type="submit" value="Start" (click)="onStartClicked()" [disabled]="isButtonDisabled_Start()" />
     </fieldset>
   </form>

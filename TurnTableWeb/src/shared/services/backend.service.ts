@@ -6,7 +6,9 @@ import { lastValueFrom, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class BackendService {
-  baseUrl: string = 'https://192.168.2.34:7282/api/'
+  public static readonly BackendUrl: string = 'https://192.168.2.34:7282';
+  private readonly apiUrl: string = BackendService.BackendUrl + '/api/'
+
   constructor(public httpClient: HttpClient) {
   }
 
@@ -25,7 +27,7 @@ export class BackendService {
   //   }
 
   async post<T>(url: string, body: {} = {}): Promise<T | null> {
-    const result$ = this.httpClient.post<T>(this.baseUrl + url, body, { observe: 'response' });
+    const result$ = this.httpClient.post<T>(this.apiUrl + url, body, { observe: 'response' });
 
     try {
       const result = await lastValueFrom(result$);

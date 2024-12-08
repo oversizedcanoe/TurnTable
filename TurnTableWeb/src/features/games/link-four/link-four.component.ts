@@ -10,7 +10,7 @@ import { GameType } from '../../../shared/models/enums';
 export class LinkFourComponent implements OnInit {
   public gameCode: string = '';
   public gameCodeToJoin: string = ''
-  public playerOneName: string = '';
+  public playerName: string = '';
   
   public readonly ROW_COUNT: number = 6;
   public readonly COL_COUNT: number = 7;
@@ -26,21 +26,21 @@ export class LinkFourComponent implements OnInit {
   }
 
   async onStartClicked() {
-    const gameCode = await this.gameService.newGame(GameType.LinkFour, this.playerOneName);
+    const gameCode = await this.gameService.newGame(GameType.LinkFour, this.playerName);
     this.gameCode = gameCode;
   }
 
   isButtonDisabled_Start(){
-    return this.playerOneName == '';
+    return this.playerName == '';
   }
 
   async onJoinClicked() {
-    // const gameCode = await this.gameService.newGame(GameType.LinkFour, this.playerOneName);
-    // this.gameCode = gameCode;
+    const playerNumber = await this.gameService.joinGame(this.gameCodeToJoin, this.playerName)
+    this.gameCode = this.gameCodeToJoin;
   }
 
   isButtonDisabled_Join(){
-    return this.playerOneName == '' || this.gameCodeToJoin == '';
+    return this.playerName == '' || this.gameCodeToJoin == '';
   }
 
   getNumberAtPosition(rowNumber: number, colNumber: number): number {

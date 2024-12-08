@@ -38,13 +38,13 @@ namespace TurnTableDomain.Services
             return gameCode;
         }
 
-        public string JoinGame(string gameCode, string playerName)
+        public int JoinGame(string gameCode, string playerName)
         {
             Game game = FindGame(gameCode);
 
-            game.AddPlayer(playerName);
+            Player addedPlayer = game.AddPlayer(playerName);
 
-            return game.UpdateEndpoint;
+            return addedPlayer.PlayerNumber;
         }
 
 

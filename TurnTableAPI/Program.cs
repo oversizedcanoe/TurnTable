@@ -11,6 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<GameManager>();
 builder.Services.AddScoped<ValidGameCodeFilter>();
+builder.Services.AddScoped<GameHub>();
 builder.Services.AddSignalR();
 
 builder.Services.AddCors(options =>
@@ -18,8 +19,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: "AllowLocalhost",
         policy =>
         {
-            policy.WithOrigins("https://localhost:7282", "http://localhost:4200", "http://192.168.2.34:4200")
-            .AllowAnyHeader().AllowAnyMethod();
+            policy.WithOrigins("https://localhost:7282", "http://localhost:4200", "http://192.168.2.34:4200", "https://192.168.2.34:7282")
+            .AllowAnyHeader().AllowAnyMethod().AllowCredentials();
         });
 });
 

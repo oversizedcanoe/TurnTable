@@ -4,6 +4,8 @@ using TurnTableBase;
 using TurnTableAPI.ActionFilters;
 using TurnTableApplication.DTOs;
 using TurnTableDomain.Services;
+using TurnTableDomain.Models;
+using Microsoft.AspNetCore.SignalR;
 
 namespace TurnTableAPI.Controllers
 {
@@ -13,11 +15,13 @@ namespace TurnTableAPI.Controllers
     {
         private readonly ILogger<GameController> _logger;
         private readonly GameManager _gameManager;
+        private readonly IHubContext<GameHub> _gameHubContext;
 
-        public GameController(ILogger<GameController> logger, GameManager gameManager)
+        public GameController(ILogger<GameController> logger, GameManager gameManager, IHubContext<GameHub> gameHubContext)
         {
             this._logger = logger;
             this._gameManager = gameManager;
+            this._gameHubContext = gameHubContext;
         }
 
         [HttpPost]
@@ -27,6 +31,8 @@ namespace TurnTableAPI.Controllers
             try
             {
                 string gameCode = _gameManager.StartNewGame(request.GameType, request.PlayerOneName, GetBackendAddress());
+
+                //await this._gameHub.AddToGroup(gameCode);
 
                 return Ok(new NewGameDTO(gameCode));
             }
@@ -40,13 +46,15 @@ namespace TurnTableAPI.Controllers
         [ServiceFilter(typeof(ValidGameCodeFilter))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<bool> Join([FromBody] JoinGameRequest request)
+        public async Task<ActionResult<JoinedGameDTO>> Join([FromBody] JoinGameRequest request)
         {
             try
             {
-                string gameCode = _gameManager.JoinGame(request.GameCode, request.PlayerName);
+                int playerNumber = _gameManager.JoinGame(request.GameCode, request.PlayerName);
 
-                return Ok(new NewGameDTO(gameCode));
+                await this._gameHubContext.Clients.Group(request.GameCode).SendAsync("JoinGame", request.PlayerName, playerNumber);
+
+                return Ok(new JoinedGameDTO(playerNumber));
             }
             catch (Exception ex)
             {
