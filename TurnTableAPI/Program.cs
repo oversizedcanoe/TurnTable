@@ -11,6 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<GameManager>();
 builder.Services.AddScoped<ValidGameCodeFilter>();
+builder.Services.AddSignalR();
 
 builder.Services.AddCors(options =>
 {
@@ -38,5 +39,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.UseCors("AllowLocalhost");
+
+app.MapHub<GameHub>("/gamehub");
 
 app.Run();

@@ -101,6 +101,5 @@ namespace TurnTableDomain.Services
             Uri fullUri = new Uri(new Uri(baseBackendUrl, UriKind.Absolute), "/hub" + "/" + "code");
             return fullUri.ToString();
         }
-
     }
 }
