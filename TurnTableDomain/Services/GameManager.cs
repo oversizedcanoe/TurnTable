@@ -80,7 +80,7 @@ namespace TurnTableDomain.Services
 
         public Game? FindGameOrDefault(string gameCode)
         {
-            Games.TryGetValue(gameCode, out Game? game);
+            Games.TryGetValue(gameCode.ToUpper(), out Game? game);
 
             return game;
         }
