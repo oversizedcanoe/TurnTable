@@ -1,4 +1,5 @@
 using TurnTableAPI.ActionFilters;
+using TurnTableDomain.Hubs;
 using TurnTableDomain.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,7 +31,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.EnableTryItOutByDefault();
+    });
 }
 
 app.UseHttpsRedirection();

@@ -6,13 +6,14 @@ namespace TurnTableDomain.Games.LinkFour
     public class LinkFour : Game
     {
         public override GameType GameType => GameType.LinkFour;
+        public override object GameState => _gameBoard; 
 
         private const int ROW_COUNT = 6;
         private const int COL_COUNT = 7;
 
         private int[][] _gameBoard = new int[ROW_COUNT][];
 
-        public LinkFour(string gameCode, Player playerOne, string updateEndpoint) : base(gameCode, playerOne, updateEndpoint)
+        public LinkFour(Player playerOne) : base(playerOne)
         {
             for (int i = 0; i < ROW_COUNT; i++)
             {
@@ -22,15 +23,11 @@ namespace TurnTableDomain.Games.LinkFour
             }
         }
 
-        public override MoveResultCode NewMove(int playerNumber, object arg1, object arg2, object arg3)
+        public override void NewMove(int playerNumber, object arg1, object arg2, object arg3)
         {
-            int columnNumber = Convert.ToInt32(arg1);
+            int columnNumber = DeserializeArg<int>(arg1);
 
             ProcessMove(playerNumber, columnNumber);
-
-            MoveResultCode resultCode = CheckForWin();
-            
-            return resultCode;
         }
 
         private int GetNumberAtPosition(int rowNumber, int colNumber)
@@ -67,12 +64,61 @@ namespace TurnTableDomain.Games.LinkFour
             }
 
             SetPosition(largestRowIndex, columnIndex, playerNumber);
+
+            if (BoardIsFull())
+            {
+                this.GameOver = true;
+                return;
+            }
+
+            bool win = CheckForWin();
+
+            if (win == false)
+            {
+                SetNextPlayerTurn();
+            }
         }
 
-        private MoveResultCode CheckForWin()
+        private bool BoardIsFull()
+        {
+            bool hasOpenSpace = false;
+
+            foreach (var row in _gameBoard)
+            {
+                foreach (var col in row)
+                {
+                    if (col == 0)
+                    {
+                        hasOpenSpace = true;
+                        break;
+                    }
+                }
+            }
+
+            return hasOpenSpace == false;
+        }
+
+        private bool CheckForWin()
         {
             // TODO
-            return MoveResultCode.NextTurn;
+
+            // Potentially set 
+            //this.PlayerWinner = 1;
+            //this.GameOver = true;
+
+            return false;
+        }
+
+        private void SetNextPlayerTurn()
+        {
+            int playerCount = this.Players.Count;
+
+            CurrentPlayerTurn += 1;
+
+            if (CurrentPlayerTurn > playerCount)
+            {
+                CurrentPlayerTurn = 1;
+            }
         }
     }
 }

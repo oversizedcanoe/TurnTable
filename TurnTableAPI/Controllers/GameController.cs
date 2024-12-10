@@ -1,38 +1,34 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TurnTableApplication.Requests;
-using TurnTableBase;
+using System.Text.Json;
 using TurnTableAPI.ActionFilters;
 using TurnTableApplication.DTOs;
-using TurnTableDomain.Services;
+using TurnTableApplication.Requests;
 using TurnTableDomain.Models;
-using Microsoft.AspNetCore.SignalR;
+using TurnTableDomain.Services;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TurnTableAPI.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/game")]
     [ApiController]
     public class GameController : BaseController
     {
         private readonly ILogger<GameController> _logger;
         private readonly GameManager _gameManager;
-        private readonly IHubContext<GameHub> _gameHubContext;
 
-        public GameController(ILogger<GameController> logger, GameManager gameManager, IHubContext<GameHub> gameHubContext)
+        public GameController(ILogger<GameController> logger, GameManager gameManager)
         {
             this._logger = logger;
             this._gameManager = gameManager;
-            this._gameHubContext = gameHubContext;
         }
 
-        [HttpPost]
+        [HttpPost("new")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<NewGameDTO> New([FromBody] NewGameRequest request)
         {
             try
             {
-                string gameCode = _gameManager.StartNewGame(request.GameType, request.PlayerOneName, GetBackendAddress());
-
-                //await this._gameHub.AddToGroup(gameCode);
+                string gameCode = _gameManager.StartNewGame(request.GameType, request.PlayerOneName);
 
                 return Ok(new NewGameDTO(gameCode));
             }
@@ -42,7 +38,7 @@ namespace TurnTableAPI.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("join")]
         [ServiceFilter(typeof(ValidGameCodeFilter))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -50,9 +46,7 @@ namespace TurnTableAPI.Controllers
         {
             try
             {
-                int playerNumber = _gameManager.JoinGame(request.GameCode, request.PlayerName);
-
-                await this._gameHubContext.Clients.Group(request.GameCode).SendAsync("JoinGame", request.PlayerName, playerNumber);
+                int playerNumber = await _gameManager.JoinGame(request.GameCode, request.PlayerName);
 
                 return Ok(new JoinedGameDTO(playerNumber));
             }
@@ -62,24 +56,52 @@ namespace TurnTableAPI.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("move")]
         [ServiceFilter(typeof(ValidGameCodeFilter))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<MoveResultCode> Move([FromBody] MoveRequest request)
+        public async Task<ActionResult> Move([FromBody] MoveRequest request)
         {
             try
             {
-                MoveResultCode result = _gameManager.Move(request.GameCode, request.PlayerNumber, request.Arg1, request.Arg2, request.Arg3);
+                await _gameManager.Move(request.GameCode, request.PlayerNumber, request.Arg1, request.Arg2, request.Arg3);
 
-                return Ok(result);
+                return Ok();
             }
             catch (Exception ex)
             {
                 return Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError);
             }
+        }
+
+        [HttpGet("{gameCode}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<GameDTO> Get([FromRoute] string gameCode)
+        {
+            try
+            {
+                Game? game = _gameManager.FindGameOrDefault(gameCode);
+
+                if (game == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(GameDTO.FromGame(game, gameCode));
+            }
+            catch (Exception ex)
+            {
+                return Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [NonAction]
+        public override ActionResult<string> HelloWorld()
+        {
+            return base.HelloWorld();
         }
     }
 }

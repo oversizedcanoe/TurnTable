@@ -6,8 +6,8 @@
 
         public object Arg1 { get; set; }
         
-        public object Arg2 { get; set; }
+        public object? Arg2 { get; set; }
         
-        public object Arg3 { get; set; }
+        public object? Arg3 { get; set; }
     }
 }

@@ -1,30 +1,54 @@
 @if (gameCode == ''){
-        <p>To start a new game, enter your name.</p>
-        <p>To join an existing game, enter your name and the four letter game code.</p>
-<hr/>
+<p>To start a new game, enter your name.</p>
+<p>To join an existing game, enter your name and the four letter game code.</p>
+<hr />
 
 <form>
-    <fieldset role="group">
-      <input type="text" name="name" placeholder="Enter your name" [(ngModel)]="playerName" />
-      <input type="submit" value="Start" (click)="onStartClicked()" [disabled]="isButtonDisabled_Start()" />
-    </fieldset>
-  </form>
-  <form>
-    <fieldset role="group">
-      <input type="text" name="join" placeholder="Enter a Game Code" [(ngModel)]="gameCodeToJoin" />
-      <input type="submit" value="Join" (click)="onJoinClicked()" [disabled]="isButtonDisabled_Join()" />
-    </fieldset>
-  </form>
+  <fieldset role="group">
+    <input type="text" name="name" placeholder="Enter your name" [(ngModel)]="playerName" />
+    <input type="submit" value="Start" (click)="onStartClicked()" [disabled]="isButtonDisabled_Start()" />
+  </fieldset>
+</form>
+<form>
+  <fieldset role="group">
+    <input type="text" name="join" placeholder="Enter a Game Code" [(ngModel)]="gameCodeToJoin" />
+    <input type="submit" value="Join" (click)="onJoinClicked()" [disabled]="isButtonDisabled_Join()" />
+  </fieldset>
+</form>
 }
 @else {
-    <p>Game Code: {{gameCode}}</p>
-    <table>
-        @for(row of [].constructor(ROW_COUNT); track $index; let rowIndex = $index){
-        <tr>
-            @for(col of [].constructor(COL_COUNT); track $index; let colIndex = $index){
-            <td (click)="cellClick(rowIndex, colIndex, 1)" id="td{{rowIndex}}-{{colIndex}}"></td>
-            }
-        </tr>
-        }
-    </table>
+<p>Game Code: {{gameCode}}</p>
+
+@if(players.length > 1) {
+<p>
+  @if(currentPlayerTurn == 1){
+  <b>
+    {{players[0].playerName}}
+  </b>
+  &amp;
+  {{players[1].playerName}}
+  }
+  @else{
+  <b>
+    {{players[1].playerName}}
+  </b>
+  &amp;
+  {{players[0].playerName}}
+  }
+</p>
 }
+@else
+{
+<p>Waiting on another player to join...</p>
+}
+<table>
+  @for(row of [].constructor(ROW_COUNT); track $index; let rowIndex = $index){
+  <tr>
+    @for(col of [].constructor(COL_COUNT); track $index; let colIndex = $index){
+    <td (click)="cellClick(rowIndex, colIndex)" id="td{{rowIndex
+  }}-{{colIndex}}"></td>
+    }
+  </tr>
+  }
+</table>
+  }

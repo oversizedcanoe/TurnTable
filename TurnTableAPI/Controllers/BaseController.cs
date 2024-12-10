@@ -3,12 +3,12 @@
 namespace TurnTableAPI.Controllers
 {
 
-    [Route("api/[action]")]
+    [Route("api")]
     [ApiController]
     public class BaseController : ControllerBase
     {
         [HttpGet]
-        public ActionResult<string> Get()
+        public virtual ActionResult<string> HelloWorld()
         {
             return Ok("Hello, world!");
         }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { GameService } from '../games.service';
 import { GameType } from '../../../shared/models/enums';
+import { PlayerDTO } from '../../../shared/models/models';
 
 @Component({
   selector: 'app-link-four',
@@ -11,14 +12,24 @@ export class LinkFourComponent implements OnInit {
   public gameCode: string = '';
   public gameCodeToJoin: string = ''
   public playerName: string = '';
+  public playerNumber: number = 0;
   
   public readonly ROW_COUNT: number = 6;
   public readonly COL_COUNT: number = 7;
   private gameBoard: number[][];
 
+  public currentPlayerTurn: number = 0;
+
+  public players: PlayerDTO[] = [];
+
+
   constructor(private gameService: GameService) {
     this.gameBoard = [];
+    gameService.onGameStateChanged.subscribe(async () => {
+      await this.updateGameState();
+    })
   }
+
   ngOnInit(): void {
     for (let i = 0; i < this.ROW_COUNT; i++) {
       this.gameBoard[i] = Array<number>(this.COL_COUNT).fill(0);
@@ -28,6 +39,8 @@ export class LinkFourComponent implements OnInit {
   async onStartClicked() {
     const gameCode = await this.gameService.newGame(GameType.LinkFour, this.playerName);
     this.gameCode = gameCode;
+    this.playerNumber = 1;
+    await this.updateGameState();
   }
 
   isButtonDisabled_Start(){
@@ -36,52 +49,59 @@ export class LinkFourComponent implements OnInit {
 
   async onJoinClicked() {
     const playerNumber = await this.gameService.joinGame(this.gameCodeToJoin, this.playerName)
+
+    if (playerNumber == -1) {
+      alert('Unable to find game');
+      return;
+    }
+
+    this.playerNumber = playerNumber;
     this.gameCode = this.gameCodeToJoin;
+    await this.updateGameState();
   }
 
   isButtonDisabled_Join(){
     return this.playerName == '' || this.gameCodeToJoin == '';
   }
 
-  getNumberAtPosition(rowNumber: number, colNumber: number): number {
-    return this.gameBoard[rowNumber][colNumber];
-  }
-
-  setCell(rowNumber: number, colNumber: number, playerNumber: 1 | 2): void {
-    const element = document.querySelector(`#td${rowNumber}-${colNumber}`);
-
-    if (element == null) {
+  async cellClick(rowIndex: number, colIndex: number): Promise<void> {
+    if (this.isMyTurn() == false || this.players.length == 1) {
       return;
     }
 
-    if (playerNumber == 1) {
-      element.classList.add('one');
-    }
-    else if (playerNumber == 2) {
-      element.classList.add('two');
-    }
-
-    this.gameBoard[rowNumber][colNumber] = playerNumber;
+    await this.gameService.move(this.gameCode, this.playerNumber, colIndex);
   }
 
-  cellClick(rowIndex: number, colIndex: number, playerNumber: 1 | 2): void {
-    // get highest rowIndex (closest row to the bottom) that is 0 for the given colIndex
-    let largestRowIndex = -1;
+  async updateGameState(): Promise<void> {
+    const gameState = await this.gameService.getGame(this.gameCode);
 
-    for (let i = 0; i < this.ROW_COUNT; i++) {
-      const colValue = this.getNumberAtPosition(i, colIndex);
+    console.warn(gameState);
 
-      if (colValue == 0) {
-        largestRowIndex = i;
+    if (gameState == null) {
+      alert('Failed to update game state, try refreshing');
+      return;
+    }
+
+    this.players = gameState.players.sort((a: PlayerDTO, b: PlayerDTO) => a.playerNumber - b.playerNumber);
+    this.gameBoard = gameState.gameState as number[][];
+
+    if (gameState.playerWinner) {
+      if (gameState.playerWinner == this.playerNumber) {
+        alert(`You won 😃`)
+      } else {
+        alert(`${this.players.find(p => p.playerNumber == gameState.playerWinner)?.playerName} won 😞`)
       }
     }
-
-    if (largestRowIndex == -1) {
-      alert('column full');
-      return;
+    else if (gameState.gameOver) {
+      alert('Game over');
     }
     else {
-      this.setCell(largestRowIndex, colIndex, playerNumber);
+      this.currentPlayerTurn = gameState.currentPlayerTurn;
     }
+  }
+
+  isMyTurn(): boolean {
+    alert('is my turn ' + (this.currentPlayerTurn == this.playerNumber).toString())
+    return this.currentPlayerTurn == this.playerNumber;
   }
 }

@@ -3,7 +3,6 @@ import { BackendService } from '../../shared/services/backend.service';
 import { GameType } from '../../shared/models/enums';
 import { HubConnectionBuilder, HubConnection } from '@microsoft/signalr';
 import { Subject } from 'rxjs';
-import { JoinGameData } from '../../shared/models/models';
 
 @Injectable({
     providedIn: 'root'
@@ -13,15 +12,15 @@ export class GameHubService {
   public static readonly HubUrl: string = "/gamehub"
 
   private hubConnection: HubConnection;
-  public onJoin: Subject<JoinGameData> = new Subject();
+  public onGameStateChanged: Subject<void> = new Subject();
 
   constructor() {
     this.hubConnection = new HubConnectionBuilder()
       .withUrl(BackendService.BackendUrl + GameHubService.HubUrl)
       .build();
 
-    this.hubConnection.on("JoinGame", async (playerName: string, playerNumber: number) => {
-      this.onJoin.next({ playerName: playerName, playerNumber: playerNumber });
+    this.hubConnection.on("GameStateChanged", async () => {
+      this.onGameStateChanged.next();
     })
   }
 

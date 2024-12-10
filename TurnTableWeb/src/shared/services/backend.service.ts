@@ -12,19 +12,24 @@ export class BackendService {
   constructor(public httpClient: HttpClient) {
   }
 
-  //   async get<T>(url: string): Promise<T> {
-  //     const result$ = this.httpClient.get(this.baseUrl + url, { observe: 'response'});
-  //     const result = await lastValueFrom(result$);
+     async get<T>(url: string): Promise<T | null> {
+       const result$ = this.httpClient.get(this.apiUrl + url, { observe: 'response'});
+       const result = await lastValueFrom(result$);
 
-  //     if (result.ok) {
-  //       return result.body as T;
-  //     }
-  //     else {
-  //       alert(`Error ${result.status}: ${result.statusText}`)
-  //       console.error(result);
-  //       return new ApiError(result.statusText, result.status)
-  //     }
-  //   }
+       try {
+         if (result.ok) {
+           return result.body as T;
+         }
+         else {
+           this.handleError(result)
+         }
+       }
+       catch (error) {
+         this.handleError(error)
+       }
+
+       return null;
+     }
 
   async post<T>(url: string, body: {} = {}): Promise<T | null> {
     const result$ = this.httpClient.post<T>(this.apiUrl + url, body, { observe: 'response' });

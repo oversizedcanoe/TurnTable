@@ -1,23 +1,29 @@
-﻿using TurnTableBase;
+﻿using System.Text.Json;
+using TurnTableBase;
 
 namespace TurnTableDomain.Models
 {
     public abstract class Game
     {
         public virtual GameType GameType { get; private set; }
+        public virtual object GameState { get; private set; }
+
         public List<Player> Players { get; private set; }
-        public string GameCode { get; private set; }
         public DateTime StartedDateTime { get; private set; }
         public DateTime LastMoveDateTime { get; private set; }
-        public string UpdateEndpoint { get; private set; }
+        public int CurrentPlayerTurn { get; set; }
+        public int? PlayerWinner { get; set; }
+        public bool GameOver { get; set; } 
 
-        public Game(string gameCode, Player playerOne, string updateEndpoint)
+        public Game(Player playerOne)
         {
-            GameCode = gameCode;
             Players = new List<Player> { playerOne };
             StartedDateTime = DateTime.UtcNow;
             LastMoveDateTime = DateTime.UtcNow;
-            UpdateEndpoint = updateEndpoint;
+            GameState = new object();
+            CurrentPlayerTurn = 1;
+            PlayerWinner = null;
+            GameOver = false;
         }
 
         public Player AddPlayer(string playerName)
@@ -34,9 +40,21 @@ namespace TurnTableDomain.Models
             LastMoveDateTime = DateTime.UtcNow;
         }
 
-        public virtual MoveResultCode NewMove(int playerNumber, object arg1, object arg2, object arg3)
+        public virtual void NewMove(int playerNumber, object arg1, object arg2, object arg3)
         {
             throw new NotImplementedException();
+        }
+
+        public T DeserializeArg<T>(object jsonElement)
+        {
+            if (jsonElement is JsonElement element)
+            {
+                return element.Deserialize<T>();
+            }
+            else
+            {
+                return (T)jsonElement;
+            }
         }
     }
 }

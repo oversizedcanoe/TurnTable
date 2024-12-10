@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TurnTableBase\TurnTableBase.csproj" />
+    <ProjectReference Include="..\TurnTableDomain\TurnTableDomain.csproj" />
   </ItemGroup>
 
 </Project>

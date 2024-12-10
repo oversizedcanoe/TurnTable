@@ -1,73 +1,86 @@
-﻿using System.Text;
+﻿using Microsoft.AspNetCore.SignalR;
+using System.Text;
 using TurnTableBase;
 using TurnTableDomain.Games.LinkFour;
+using TurnTableDomain.Hubs;
 using TurnTableDomain.Models;
 
 namespace TurnTableDomain.Services
 {
     public class GameManager
     {
-        public List<Game> Games { get; set; }
+        public Dictionary<string, Game> Games { get; set; } = new();
 
         private const string GAME_CODE_CHARS = "ABCDEFGHJKMNPQRSTUVWXYZ";
+        private readonly IHubContext<GameHub> _gameHub;
 
-        public GameManager()
+        public GameManager(IHubContext<GameHub> gameHub)
         {
-            Games = new List<Game>();
+            this._gameHub = gameHub;
         }
 
-        public string StartNewGame(GameType gameType, string playerOneName, string backendUrl)
+        public string StartNewGame(GameType gameType, string playerOneName)
         {
             Game game;
 
             string gameCode = GenerateGameCode();
-            string updateEndpoint = GenerateUpdateEndpoint(backendUrl, gameCode);
             Player player = new Player(1, playerOneName);
 
             switch (gameType)
             {
                 case GameType.LinkFour:
-                    game = new LinkFour(gameCode, player, updateEndpoint);
+                    game = new LinkFour(player);
                     break;
                 default:
                     throw new Exception($"Unknown GameType passed: {gameType}");
             }
 
-            Games.Add(game);
+            Games[gameCode] = game;
 
             return gameCode;
         }
 
-        public int JoinGame(string gameCode, string playerName)
+        public async Task<int> JoinGame(string gameCode, string playerName)
         {
             Game game = FindGame(gameCode);
 
             Player addedPlayer = game.AddPlayer(playerName);
 
+            await SendGameStateChanged(gameCode);
+
             return addedPlayer.PlayerNumber;
         }
 
 
-        public MoveResultCode Move(string gameCode, int playerNumber, object arg1, object arg2, object arg3)
+        public async Task Move(string gameCode, int playerNumber, object arg1, object arg2, object arg3)
         {
             Game game = FindGame(gameCode);
 
-            return game.NewMove(playerNumber, arg1, arg2, arg3);
+            game.NewMove(playerNumber, arg1, arg2, arg3);
+            
+            await SendGameStateChanged(gameCode);
         }
 
         public bool IsGameActive(string gameCode)
         {
-            return Games.Any(g => g.GameCode == gameCode);
+            return Games.ContainsKey(gameCode);
         }
 
-        private Game FindGame(string gameCode)
+        public Game FindGame(string gameCode)
         {
-            var game = Games.FirstOrDefault(g => g.GameCode == gameCode);
+            Game? game = FindGameOrDefault(gameCode);
 
             if (game == null)
             {
                 throw new GameNotFoundException();
             }
+
+            return game;
+        }
+
+        public Game? FindGameOrDefault(string gameCode)
+        {
+            Games.TryGetValue(gameCode, out Game? game);
 
             return game;
         }
@@ -89,7 +102,7 @@ namespace TurnTableDomain.Services
 
                 gameCode = sb.ToString();
             }
-            while (Games.Count(g => g.GameCode == gameCode) > 0);
+            while (Games.ContainsKey(gameCode));
             // In the future, could have seperate service with an available list of game codes that 
             // generates more on the fly when it gets low.
 
@@ -100,6 +113,11 @@ namespace TurnTableDomain.Services
         {
             Uri fullUri = new Uri(new Uri(baseBackendUrl, UriKind.Absolute), "/hub" + "/" + "code");
             return fullUri.ToString();
+        }
+
+        private async Task SendGameStateChanged(string gameCode)
+        {
+            await this._gameHub.Clients.Group(gameCode).SendAsync("GameStateChanged");
         }
     }
 }
