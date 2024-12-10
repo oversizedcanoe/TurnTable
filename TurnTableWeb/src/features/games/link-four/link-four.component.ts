@@ -13,15 +13,11 @@ export class LinkFourComponent implements OnInit {
   public gameCodeToJoin: string = ''
   public playerName: string = '';
   public playerNumber: number = 0;
-  
   public readonly ROW_COUNT: number = 6;
   public readonly COL_COUNT: number = 7;
-  private gameBoard: number[][];
-
   public currentPlayerTurn: number = 0;
-
   public players: PlayerDTO[] = [];
-
+  private gameBoard: number[][];
 
   constructor(private gameService: GameService) {
     this.gameBoard = [];
@@ -65,7 +61,13 @@ export class LinkFourComponent implements OnInit {
   }
 
   async cellClick(rowIndex: number, colIndex: number): Promise<void> {
-    if (this.isMyTurn() == false || this.players.length == 1) {
+    
+    if (this.isMyTurn() == false) {
+      alert('Wait your turn!');
+      return;
+    }
+    if (this.players.length == 1) {
+      alert('You need two players to play this game.')
       return;
     }
 
@@ -101,7 +103,6 @@ export class LinkFourComponent implements OnInit {
   }
 
   isMyTurn(): boolean {
-    alert('is my turn ' + (this.currentPlayerTurn == this.playerNumber).toString())
     return this.currentPlayerTurn == this.playerNumber;
   }
 }
