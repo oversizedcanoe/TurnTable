@@ -17,7 +17,7 @@ export class LinkFourComponent implements OnInit {
   public readonly COL_COUNT: number = 7;
   public currentPlayerTurn: number = 0;
   public players: PlayerDTO[] = [];
-  private gameBoard: number[][];
+  public gameBoard: number[][];
 
   constructor(private gameService: GameService) {
     this.gameBoard = [];
@@ -61,7 +61,6 @@ export class LinkFourComponent implements OnInit {
   }
 
   async cellClick(rowIndex: number, colIndex: number): Promise<void> {
-    
     if (this.isMyTurn() == false) {
       alert('Wait your turn!');
       return;

@@ -11,4 +11,7 @@
     <None Remove="src\games\**" />
     <TypeScriptConfiguration Remove="src\games\**" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\shared\components\NewFolder\" />
+  </ItemGroup>
 </Project>

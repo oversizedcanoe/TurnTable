@@ -29,11 +29,11 @@
   {{players[1].playerName}}
   }
   @else{
+  {{players[0].playerName}}
+  &amp;
   <b>
     {{players[1].playerName}}
   </b>
-  &amp;
-  {{players[0].playerName}}
   }
 </p>
 }
@@ -49,8 +49,17 @@
   @for(row of [].constructor(ROW_COUNT); track $index; let rowIndex = $index){
   <tr>
     @for(col of [].constructor(COL_COUNT); track $index; let colIndex = $index){
-    <td (click)="cellClick(rowIndex, colIndex)" id="td{{rowIndex
-  }}-{{colIndex}}"></td>
+    <td (click)="cellClick(rowIndex, colIndex)" id="td{{rowIndex}}-{{colIndex}}">
+      @if (gameBoard[rowIndex][colIndex] == 1) {
+      <div class="cell one"></div>
+      }
+      @else if (gameBoard[rowIndex][colIndex] == 2){
+      <div class="cell two"></div>
+      }
+      @else {
+      <div class="cell"></div>
+      }
+    </td>
     }
   </tr>
   }

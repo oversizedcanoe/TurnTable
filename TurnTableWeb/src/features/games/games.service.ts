@@ -26,24 +26,18 @@ export class GameService {
       newGameCode = result.gameCode;
     }
 
-    this.gameHubService.joinGroup(newGameCode);
-
-    this.gameHubService.onGameStateChanged.subscribe(() => {
-      console.warn("Game State Changed");
-      this.onGameStateChanged.next();
-    });
+    await this.subsribeToHub(newGameCode);
 
     return newGameCode;
   }
 
   async joinGame(gameCode: string, playerName: string): Promise<number> {
-    this.gameHubService.joinGroup(gameCode);
-
     var body = { gameCode: gameCode, playerName: playerName };
 
     const result = await this.backendService.post<JoinedGameDTO>(this.url + '/join', body);
 
     if (result) {
+      await this.subsribeToHub(gameCode);
       return result.playerNumber;
     }
     else {
@@ -68,5 +62,15 @@ export class GameService {
     const result = await this.backendService.post<void>(this.url + '/move', body);
 
     return true;
+  }
+
+  async subsribeToHub(gameCode: string): Promise<void> {
+    await this.gameHubService.joinGroup(gameCode);
+
+    // Todo --> Maybe need to leave group/unsubscribe when game over/nav away
+    this.gameHubService.onGameStateChanged.subscribe(() => {
+      console.warn("Game State Changed");
+      this.onGameStateChanged.next();
+    });
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BackendService } from '../../shared/services/backend.service';
 import { GameType } from '../../shared/models/enums';
-import { HubConnectionBuilder, HubConnection } from '@microsoft/signalr';
+import { HubConnectionBuilder, HubConnection, HubConnectionState } from '@microsoft/signalr';
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -19,13 +19,20 @@ export class GameHubService {
       .withUrl(BackendService.BackendUrl + GameHubService.HubUrl)
       .build();
 
+    this.hubConnection.onclose(async () => {
+      await this.connectAsync();
+    });
+
     this.hubConnection.on("GameStateChanged", async () => {
       this.onGameStateChanged.next();
     })
   }
 
   async connectAsync() {
-    await this.hubConnection.start();
+    console.warn(this.hubConnection.state);
+    if (this.hubConnection.state != HubConnectionState.Connected) {
+      await this.hubConnection.start();
+    }
   }
 
   async sendEventToServerAsync() {
