@@ -1,4 +1,5 @@
-﻿using TurnTableBase;
+﻿using Newtonsoft.Json;
+using TurnTableBase;
 using TurnTableDomain.Models;
 
 namespace TurnTableDomain.Games.LinkFour
@@ -6,7 +7,7 @@ namespace TurnTableDomain.Games.LinkFour
     public class LinkFour : Game
     {
         public override GameType GameType => GameType.LinkFour;
-        public override object GameState => _gameBoard; 
+        public override object GameState => _gameBoard;
 
         private const int ROW_COUNT = 6;
         private const int COL_COUNT = 7;
@@ -71,7 +72,13 @@ namespace TurnTableDomain.Games.LinkFour
                 return;
             }
 
-            bool win = CheckForWin();
+            bool win = CheckForWin(out int winnerPlayer);
+
+            if (win)
+            {
+                this.PlayerWinner = winnerPlayer;
+                this.GameOver = true;
+            }
 
             if (win == false)
             {
@@ -98,14 +105,49 @@ namespace TurnTableDomain.Games.LinkFour
             return hasOpenSpace == false;
         }
 
-        private bool CheckForWin()
+        private bool CheckForWin(out int playerNumber)
         {
-            // TODO
+            Console.WriteLine("Check for win");
+            for (int rowIndex = 0; rowIndex < ROW_COUNT; rowIndex++)
+            {
+                for(int colIndex =  0; colIndex < COL_COUNT; colIndex++)
+                {
+                    int token = _gameBoard[rowIndex][colIndex];
 
-            // Potentially set 
-            //this.PlayerWinner = 1;
-            //this.GameOver = true;
+                    if (token == 0)
+                    {
+                        continue;
+                    }
 
+                    playerNumber = token;
+
+                    // First check in a row (all in the same column)
+                    // But no need to check if this index is greater than COL_COUNT - 4, as there is not enough room for four in a row then
+                    if (colIndex <= COL_COUNT - 4)
+                    {
+                        int sameTokenQuantityInARow = 1;
+                        int innerColIndex = colIndex + 1;
+
+                        while (innerColIndex < COL_COUNT)
+                        {
+                            if (_gameBoard[rowIndex][innerColIndex] == token)
+                            {
+                                sameTokenQuantityInARow += 1;
+
+                                if (sameTokenQuantityInARow == 4)
+                                {
+                                    return true;
+                                }
+                            }
+
+                            innerColIndex++;
+                        }
+                    }
+
+                }
+            }
+
+            playerNumber = -1;
             return false;
         }
 

@@ -91,19 +91,23 @@ export class LinkFourComponent implements OnInit {
     this.players = gameState.players.sort((a: PlayerDTO, b: PlayerDTO) => a.playerNumber - b.playerNumber);
     this.gameBoard = gameState.gameState as number[][];
 
-    if (gameState.playerWinner) {
-      if (gameState.playerWinner == this.playerNumber) {
-        alert(`You won 😃`)
-      } else {
-        alert(`${this.players.find(p => p.playerNumber == gameState.playerWinner)?.playerName} won 😞`)
+    // Short delay to ensure game board updates before showing prompt
+    setTimeout(() => {
+      if (gameState.playerWinner) {
+        if (gameState.playerWinner == this.playerNumber) {
+          alert(`You won 😃`)
+        } else {
+          alert(`${this.players.find(p => p.playerNumber == gameState.playerWinner)?.playerName} won 😞`)
+        }
       }
-    }
-    else if (gameState.gameOver) {
-      alert('Game over');
-    }
-    else {
-      this.currentPlayerTurn = gameState.currentPlayerTurn;
-    }
+      else if (gameState.gameOver) {
+        alert('Game over');
+      }
+      else {
+        this.currentPlayerTurn = gameState.currentPlayerTurn;
+      }
+    }, 150);
+    
   }
 
   isMyTurn(): boolean {
