@@ -45,6 +45,8 @@ export class LinkFourComponent implements OnInit {
   }
 
   async onJoinClicked() {
+    this.gameCodeToJoin = this.gameCodeToJoin.toUpperCase();
+
     const playerNumber = await this.gameService.joinGame(this.gameCodeToJoin, this.playerName)
 
     if (playerNumber == -1) {

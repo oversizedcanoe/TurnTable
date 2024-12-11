@@ -61,11 +61,6 @@ namespace TurnTableDomain.Services
             await SendGameStateChanged(gameCode);
         }
 
-        public bool IsGameActive(string gameCode)
-        {
-            return Games.ContainsKey(gameCode);
-        }
-
         public Game FindGame(string gameCode)
         {
             Game? game = FindGameOrDefault(gameCode);

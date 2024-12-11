@@ -26,7 +26,7 @@ export class GameService {
       newGameCode = result.gameCode;
     }
 
-    await this.subsribeToHub(newGameCode);
+    await this.subscribeToHub(newGameCode);
 
     return newGameCode;
   }
@@ -37,7 +37,7 @@ export class GameService {
     const result = await this.backendService.post<JoinedGameDTO>(this.url + '/join', body);
 
     if (result) {
-      await this.subsribeToHub(gameCode);
+      await this.subscribeToHub(gameCode);
       return result.playerNumber;
     }
     else {
@@ -64,7 +64,7 @@ export class GameService {
     return true;
   }
 
-  async subsribeToHub(gameCode: string): Promise<void> {
+  async subscribeToHub(gameCode: string): Promise<void> {
     await this.gameHubService.joinGroup(gameCode);
 
     // Todo --> Maybe need to leave group/unsubscribe when game over/nav away

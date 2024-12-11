@@ -6,7 +6,7 @@ namespace TurnTableDomain.Hubs
     {
         public async Task JoinGroup(string groupName)
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+            await Groups.AddToGroupAsync(Context.ConnectionId, groupName.ToUpper());
         }
 
         public async Task GameStateChanged(string gameCode)

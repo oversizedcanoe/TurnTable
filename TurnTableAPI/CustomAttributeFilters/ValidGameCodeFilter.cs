@@ -24,7 +24,7 @@ namespace TurnTableAPI.ActionFilters
 
             if (string.IsNullOrEmpty(gameCode) == false)
             {
-                bool gameCodeExists = this._gameManager.IsGameActive(gameCode);
+                bool gameCodeExists = this._gameManager.FindGameOrDefault(gameCode) != null;
 
                 if (gameCodeExists == false)
                 {
