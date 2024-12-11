@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { GameService } from '../games.service';
 import { GameType } from '../../../shared/models/enums';
-import { PlayerDTO } from '../../../shared/models/models';
+import { GameDTO, PlayerDTO } from '../../../shared/models/models';
 
 @Component({
   selector: 'app-link-four',
@@ -18,6 +18,7 @@ export class LinkFourComponent implements OnInit {
   public currentPlayerTurn: number = 0;
   public players: PlayerDTO[] = [];
   public gameBoard: number[][];
+  public gameState!: GameDTO;
 
   constructor(private gameService: GameService) {
     this.gameBoard = [];
@@ -82,6 +83,8 @@ export class LinkFourComponent implements OnInit {
       alert('Failed to update game state, try refreshing');
       return;
     }
+
+    this.gameState = gameState;
 
     this.players = gameState.players.sort((a: PlayerDTO, b: PlayerDTO) => a.playerNumber - b.playerNumber);
     this.gameBoard = gameState.gameState as number[][];

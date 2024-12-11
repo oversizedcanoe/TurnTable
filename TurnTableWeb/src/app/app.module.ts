@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GamesModule } from '../features/games/games.module';
+import { SharedModule } from '../shared/components/shared.module'
 import { provideHttpClient } from '@angular/common/http';
 
 @NgModule({
@@ -13,7 +14,8 @@ import { provideHttpClient } from '@angular/common/http';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    GamesModule
+    GamesModule,
+    SharedModule
   ],
   providers: [provideHttpClient()],
   bootstrap: [AppComponent]

@@ -17,33 +17,8 @@
 </form>
 }
 @else {
-<p>Game Code: {{gameCode}}</p>
+<app-game-detail [gameState]="gameState" [playerNumber]="playerNumber"></app-game-detail>
 
-@if(players.length > 1) {
-<p>
-  @if(currentPlayerTurn == 1){
-  <b>
-    {{players[0].playerName}}
-  </b>
-  &amp;
-  {{players[1].playerName}}
-  }
-  @else{
-  {{players[0].playerName}}
-  &amp;
-  <b>
-    {{players[1].playerName}}
-  </b>
-  }
-</p>
-}
-@else
-{
-<p>Waiting on another player to join...</p>
-}
-
-<h5>Debug stuff</h5>
-<p>Your name / number: {{playerName}} / {{playerNumber}}</p>
 
 <table>
   @for(row of [].constructor(ROW_COUNT); track $index; let rowIndex = $index){

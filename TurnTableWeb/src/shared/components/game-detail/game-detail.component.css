@@ -1,0 +1,8 @@
+.bold {
+    font-weight: bold;
+}
+
+.currentTurn::before {
+  content: '👉 ';
+  vertical-align: baseline;
+}

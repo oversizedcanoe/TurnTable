@@ -7,6 +7,7 @@ import { WordTrainComponent } from './word-train/word-train.component';
 import { Game5Component } from './game-5/game-5.component';
 import { NgxCardsComponent } from 'ngx-cards';
 import { FormsModule } from '@angular/forms';
+import { SharedModule } from '../../shared/components/shared.module';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     NgxCardsComponent,
-    FormsModule
+    FormsModule,
+    SharedModule
   ],
   exports: [ScatComponent, LinkFourComponent, TicTacNoComponent, WordTrainComponent, Game5Component],
 })

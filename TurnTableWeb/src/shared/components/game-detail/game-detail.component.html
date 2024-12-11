@@ -1,0 +1,31 @@
+<table>
+  <thead>
+    <tr>
+      <th>
+        Game
+      </th>
+      <th>
+        Game Code
+      </th>
+      <th>
+        Player One 🟢
+      </th>
+      <th>
+        Player Two 🔵
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{gameState.gameType}}</td>
+      <td>{{gameState.gameCode}}</td>
+      <td [ngClass]="getClass(1)">{{gameState.players[0].playerName}}</td>
+      @if(gameState.players.length > 1){
+      <td [ngClass]="getClass(2)">{{gameState.players[1].playerName}}</td>
+      }
+      @else{
+      <td>Waiting...</td>
+      }
+    </tr>
+  </tbody>
+</table>
