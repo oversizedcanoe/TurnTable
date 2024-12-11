@@ -17,7 +17,7 @@
   </thead>
   <tbody>
     <tr>
-      <td>{{gameState.gameType}}</td>
+      <td>{{GameType[gameState.gameType]}}</td>
       <td>{{gameState.gameCode}}</td>
       <td [ngClass]="getClass(1)">{{gameState.players[0].playerName}}</td>
       @if(gameState.players.length > 1){
