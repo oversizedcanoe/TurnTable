@@ -107,7 +107,6 @@ namespace TurnTableDomain.Games.LinkFour
 
         private bool CheckForWin(out int playerNumber)
         {
-            Console.WriteLine("Check for win");
             for (int rowIndex = 0; rowIndex < ROW_COUNT; rowIndex++)
             {
                 for(int colIndex =  0; colIndex < COL_COUNT; colIndex++)
@@ -144,6 +143,28 @@ namespace TurnTableDomain.Games.LinkFour
                         }
                     }
 
+                    // Next check in a column (all in the same row)
+                    // No need to check if this index is greater than ROW_COUNT - 4, as there is not enough room for four in a row then
+                    if (rowIndex <= ROW_COUNT - 4)
+                    {
+                        int sameTokenQuantityInACol = 1;
+                        int innerRowIndex = rowIndex + 1;
+
+                        while (innerRowIndex < ROW_COUNT)
+                        {
+                            if (_gameBoard[innerRowIndex][colIndex] == token)
+                            {
+                                sameTokenQuantityInACol += 1;
+
+                                if (sameTokenQuantityInACol == 4)
+                                {
+                                    return true;
+                                }
+                            }
+
+                            innerRowIndex++;
+                        }
+                    }
                 }
             }
 
