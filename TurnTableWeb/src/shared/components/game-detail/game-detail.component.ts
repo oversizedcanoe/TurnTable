@@ -12,8 +12,6 @@ export class GameDetailComponent {
   @Input() playerNumber!: number;
   @Input() gameState!: GameDTO;
 
-  public GameType = GameType
-
   constructor() {
 
   }

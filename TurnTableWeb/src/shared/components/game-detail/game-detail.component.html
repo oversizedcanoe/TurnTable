@@ -1,23 +1,20 @@
 <table>
   <thead>
     <tr>
-      <th>
-        Game
-      </th>
+
       <th>
         Game Code
       </th>
       <th>
-        Player One 🟢
+        Player 1 🟢
       </th>
       <th>
-        Player Two 🔵
+        Player 2 🔵
       </th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>{{GameType[gameState.gameType]}}</td>
       <td>{{gameState.gameCode}}</td>
       <td [ngClass]="getClass(1)">{{gameState.players[0].playerName}}</td>
       @if(gameState.players.length > 1){
