@@ -121,13 +121,14 @@ namespace TurnTableDomain.Games.LinkFour
                     playerNumber = token;
 
                     // First check in a row (all in the same column)
-                    // But no need to check if this index is greater than COL_COUNT - 4, as there is not enough room for four in a row then
+                    // No need to check if this index is greater than COL_COUNT - 4, as there is not enough room for four in a row then
                     if (colIndex <= COL_COUNT - 4)
                     {
                         int sameTokenQuantityInARow = 1;
                         int innerColIndex = colIndex + 1;
+                        bool sameToken = true;
 
-                        while (innerColIndex < COL_COUNT)
+                        while (innerColIndex < COL_COUNT && sameToken)
                         {
                             if (_gameBoard[rowIndex][innerColIndex] == token)
                             {
@@ -137,6 +138,10 @@ namespace TurnTableDomain.Games.LinkFour
                                 {
                                     return true;
                                 }
+                            }
+                            else
+                            {
+                                sameToken = false;
                             }
 
                             innerColIndex++;
@@ -149,8 +154,9 @@ namespace TurnTableDomain.Games.LinkFour
                     {
                         int sameTokenQuantityInACol = 1;
                         int innerRowIndex = rowIndex + 1;
+                        bool sameToken = true;
 
-                        while (innerRowIndex < ROW_COUNT)
+                        while (innerRowIndex < ROW_COUNT && sameToken)
                         {
                             if (_gameBoard[innerRowIndex][colIndex] == token)
                             {
@@ -160,6 +166,79 @@ namespace TurnTableDomain.Games.LinkFour
                                 {
                                     return true;
                                 }
+                            }
+                            else
+                            {
+                                sameToken = false;
+                            }
+
+                            innerRowIndex++;
+                        }
+                    }
+
+                    // Diagonal win check
+                    // First check the upper left corner which can only go DOWNWARD
+                    if (rowIndex <= ROW_COUNT - 4 && colIndex <= COL_COUNT - 4)
+                    {
+                        int sameTokenQuantityInADiag = 1;                        
+                        int innerRowIndex = rowIndex - 1;
+                        bool sameToken = true;
+
+                        while (innerRowIndex < ROW_COUNT && sameToken)
+                        {
+                            int innerColIndex = colIndex - 1;
+
+                            while (innerColIndex < COL_COUNT && sameToken)
+                            {
+                                if (_gameBoard[innerRowIndex][innerColIndex] == token)
+                                {
+                                    sameTokenQuantityInADiag += 1;
+
+                                    if (sameTokenQuantityInADiag == 4)
+                                    {
+                                        return true;
+                                    }
+                                }
+                                else
+                                {
+                                    sameToken = false;
+                                }
+
+                                innerColIndex--;
+                            }
+
+                            innerRowIndex--;
+                        }
+                    }
+
+                    // Next check the bottom left corner which can only go UPWARD
+                    if (rowIndex > ROW_COUNT - 4 && rowIndex < ROW_COUNT && colIndex <= COL_COUNT - 4)
+                    {
+                        int sameTokenQuantityInADiag = 1;
+                        int innerRowIndex = rowIndex + 1;
+                        bool sameToken = true;
+
+                        while (innerRowIndex < ROW_COUNT && sameToken)
+                        {
+                            int innerColIndex = colIndex + 1;
+
+                            while (innerColIndex < COL_COUNT && sameToken)
+                            {
+                                if (_gameBoard[innerRowIndex][innerColIndex] == token)
+                                {
+                                    sameTokenQuantityInADiag += 1;
+
+                                    if (sameTokenQuantityInADiag == 4)
+                                    {
+                                        return true;
+                                    }
+                                }
+                                else
+                                {
+                                    sameToken = false;
+                                }
+
+                                innerColIndex++;
                             }
 
                             innerRowIndex++;
