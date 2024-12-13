@@ -1,1 +1,17 @@
-<p>word-train works!</p>
+<table>
+  <tbody>
+    @for(row of [].constructor(WORD_COUNT); track $index; let wordIndex = $index){
+    <tr>
+      @for(char of [].constructor(CHAR_COUNT); track $index; let charIndex = $index){
+      <td>
+        <input maxlength="1" type="text" autocomplete="off"
+               [disabled]="isRowDisabled(wordIndex)"
+               value="{{gameBoard[wordIndex][charIndex]}}"
+               (input)="onInput(wordIndex, charIndex, $event)"
+               id="input{{wordIndex}}-{{charIndex}}"/>
+      </td>
+      }
+    </tr>
+    }
+  </tbody>
+</table>

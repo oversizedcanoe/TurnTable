@@ -1,0 +1,49 @@
+td {
+  border: 1px solid black;
+  text-align: center;
+  background-color: aliceblue;
+  padding: 0;
+  margin: 0;
+
+  @media (max-width: 768px) {
+    /* Small devices*/
+    height: 6vh !important;
+    width: 6vh !important;
+  }
+
+  @media (min-width: 768px) {
+    /* Large devices*/
+    height: 10vh !important;
+    width: 10vh !important;
+  }
+}
+
+table {
+  max-width: 100%;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    /* Small devices*/
+    width: 42vh;
+    height: 36vh;
+  }
+
+  @media (min-width: 768px) {
+    /* Large devices*/
+    width: 70vh;
+    height: 60vh;
+  }
+}
+
+input {
+  text-transform: capitalize;
+  height: 100%;
+  margin: 0;
+  border-radius: 0px;
+  padding: 0;
+  text-align: center;
+}
+
+input:disabled{
+    background-color: lightgray;
+}

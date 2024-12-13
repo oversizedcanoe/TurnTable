@@ -50,7 +50,7 @@ export class LinkFourComponent implements OnInit {
     const playerNumber = await this.gameService.joinGame(this.gameCodeToJoin, this.playerName)
 
     if (playerNumber == -1) {
-      alert('Unable to find game');
+      alert('Unable to join game');
       return;
     }
 
