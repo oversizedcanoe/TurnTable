@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GameService } from '../games.service';
 import { GameType } from '../../../shared/models/enums';
 import { GameDTO, PlayerDTO } from '../../../shared/models/models';
+import { StorageService } from '../../../shared/services/storage.service';
 
 @Component({
   selector: 'app-link-four',
@@ -20,7 +21,7 @@ export class LinkFourComponent implements OnInit {
   public gameBoard: number[][];
   public gameState!: GameDTO;
 
-  constructor(private gameService: GameService) {
+  constructor(private gameService: GameService, private storage: StorageService) {
     this.gameBoard = [];
     gameService.onGameStateChanged.subscribe(async () => {
       await this.updateGameState();
@@ -31,20 +32,25 @@ export class LinkFourComponent implements OnInit {
     for (let i = 0; i < this.ROW_COUNT; i++) {
       this.gameBoard[i] = Array<number>(this.COL_COUNT).fill(0);
     }
+
+    this.playerName = this.storage.username ?? '';
   }
 
   async onStartClicked() {
+    this.storage.username = this.playerName;
     const gameCode = await this.gameService.newGame(GameType.LinkFour, this.playerName);
     this.gameCode = gameCode;
     this.playerNumber = 1;
     await this.updateGameState();
   }
 
-  isButtonDisabled_Start(){
+  isButtonDisabled_Start() {
     return this.playerName == '';
   }
 
   async onJoinClicked() {
+    this.storage.username = this.playerName;
+
     this.gameCodeToJoin = this.gameCodeToJoin.toUpperCase();
 
     const playerNumber = await this.gameService.joinGame(this.gameCodeToJoin, this.playerName)
@@ -59,7 +65,7 @@ export class LinkFourComponent implements OnInit {
     await this.updateGameState();
   }
 
-  isButtonDisabled_Join(){
+  isButtonDisabled_Join() {
     return this.playerName == '' || this.gameCodeToJoin == '';
   }
 
@@ -107,7 +113,7 @@ export class LinkFourComponent implements OnInit {
         this.currentPlayerTurn = gameState.currentPlayerTurn;
       }
     }, 150);
-    
+
   }
 
   isMyTurn(): boolean {
