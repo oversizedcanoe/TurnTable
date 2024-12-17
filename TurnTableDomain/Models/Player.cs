@@ -10,5 +10,7 @@
             PlayerNumber = playerNumber;
             Name = name;
         }
+
+        public static Player SinglePlayer => new Player(1, nameof(SinglePlayer));
     }
 }

@@ -24,12 +24,15 @@ namespace TurnTableDomain.Services
             Game game;
 
             string gameCode = GenerateGameCode();
-            Player player = new Player(1, playerOneName);
 
             switch (gameType)
             {
                 case GameType.LinkFour:
+                    Player player = new Player(1, playerOneName);
                     game = new LinkFour(player);
+                    break;
+                case GameType.WordTrain:
+                    game = new WordTrain(Player.SinglePlayer);
                     break;
                 default:
                     throw new Exception($"Unknown GameType passed: {gameType}");
