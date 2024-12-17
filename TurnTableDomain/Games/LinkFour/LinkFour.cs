@@ -107,9 +107,11 @@ namespace TurnTableDomain.Games.LinkFour
 
         private bool CheckForWin(out int playerNumber)
         {
+            Console.Clear();
+
             for (int rowIndex = 0; rowIndex < ROW_COUNT; rowIndex++)
             {
-                for(int colIndex =  0; colIndex < COL_COUNT; colIndex++)
+                for (int colIndex = 0; colIndex < COL_COUNT; colIndex++)
                 {
                     int token = _gameBoard[rowIndex][colIndex];
 
@@ -178,70 +180,60 @@ namespace TurnTableDomain.Games.LinkFour
 
                     // Diagonal win check
                     // First check the upper left corner which can only go DOWNWARD
-                    if (rowIndex <= ROW_COUNT - 4 && colIndex <= COL_COUNT - 4)
-                    {
-                        int sameTokenQuantityInADiag = 1;                        
-                        int innerRowIndex = rowIndex - 1;
-                        bool sameToken = true;
-
-                        while (innerRowIndex < ROW_COUNT && sameToken)
-                        {
-                            int innerColIndex = colIndex - 1;
-
-                            while (innerColIndex < COL_COUNT && sameToken)
-                            {
-                                if (_gameBoard[innerRowIndex][innerColIndex] == token)
-                                {
-                                    sameTokenQuantityInADiag += 1;
-
-                                    if (sameTokenQuantityInADiag == 4)
-                                    {
-                                        return true;
-                                    }
-                                }
-                                else
-                                {
-                                    sameToken = false;
-                                }
-
-                                innerColIndex--;
-                            }
-
-                            innerRowIndex--;
-                        }
-                    }
-
-                    // Next check the bottom left corner which can only go UPWARD
-                    if (rowIndex > ROW_COUNT - 4 && rowIndex < ROW_COUNT && colIndex <= COL_COUNT - 4)
+                    if (rowIndex < ROW_COUNT - 4 && colIndex <= COL_COUNT - 4)
                     {
                         int sameTokenQuantityInADiag = 1;
                         int innerRowIndex = rowIndex + 1;
+                        int innerColIndex = colIndex + 1;
                         bool sameToken = true;
 
-                        while (innerRowIndex < ROW_COUNT && sameToken)
+                        while (innerRowIndex >= 0 && innerColIndex < COL_COUNT && sameToken)
                         {
-                            int innerColIndex = colIndex + 1;
-
-                            while (innerColIndex < COL_COUNT && sameToken)
+                            if (_gameBoard[innerRowIndex][innerColIndex] == token)
                             {
-                                if (_gameBoard[innerRowIndex][innerColIndex] == token)
-                                {
-                                    sameTokenQuantityInADiag += 1;
+                                sameTokenQuantityInADiag += 1;
 
-                                    if (sameTokenQuantityInADiag == 4)
-                                    {
-                                        return true;
-                                    }
-                                }
-                                else
+                                if (sameTokenQuantityInADiag == 4)
                                 {
-                                    sameToken = false;
+                                    return true;
                                 }
-
-                                innerColIndex++;
+                            }
+                            else
+                            {
+                                sameToken = false;
                             }
 
+                            innerColIndex++;
                             innerRowIndex++;
+                        }
+                    }
+
+                    //Next check the bottom left corner which can only go UPWARD
+                    if (rowIndex > ROW_COUNT - 4 && rowIndex < ROW_COUNT && colIndex <= COL_COUNT - 4)
+                    {
+                        int sameTokenQuantityInADiag = 1;
+                        int innerRowIndex = rowIndex - 1;
+                        int innerColIndex = colIndex + 1;
+                        bool sameToken = true;
+
+                        while (innerRowIndex >= 0 && innerColIndex < COL_COUNT && sameToken)
+                        {
+                            if (_gameBoard[innerRowIndex][innerColIndex] == token)
+                            {
+                                sameTokenQuantityInADiag += 1;
+
+                                if (sameTokenQuantityInADiag == 4)
+                                {
+                                    return true;
+                                }
+                            }
+                            else
+                            {
+                                sameToken = false;
+                            }
+
+                            innerColIndex++;
+                            innerRowIndex--;
                         }
                     }
                 }
