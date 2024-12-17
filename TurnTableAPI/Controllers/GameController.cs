@@ -5,7 +5,6 @@ using TurnTableApplication.DTOs;
 using TurnTableApplication.Requests;
 using TurnTableDomain.Models;
 using TurnTableDomain.Services;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TurnTableAPI.Controllers
 {

@@ -15,8 +15,11 @@ export class GameService {
 
   constructor(private backendService: BackendService, private gameHubService: GameHubService) { }
 
-  async newGame(gameType: GameType, playerOneName: string): Promise<string> {
+  async newGame(gameType: GameType, playerOneName?: string | null): Promise<string> {
     var body = { gameType: gameType, playerOneName: playerOneName };
+
+    // TODO Should there by a "new SinglePlayerGame" and a "new online multiplayer game"?
+    // There is no need for game codes or subscribing to hubs in single player...
 
     let newGameCode: string = ''
 
