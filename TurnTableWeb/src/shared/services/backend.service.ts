@@ -50,6 +50,7 @@ export class BackendService {
 
     if(error instanceof HttpErrorResponse){
       alert(`Sorry, an error occurred (HTTP ${error.status})`);
+      alert(JSON.stringify(error))
     } else {
       alert('Unknown error');
     }

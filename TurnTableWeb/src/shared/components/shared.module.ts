@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { GameDetailComponent } from './game-detail/game-detail.component';
-
-
+import { FormsModule } from '@angular/forms';
+import { BaseGameComponent } from './base-game/base-game.component';
 
 @NgModule({
-  declarations: [GameDetailComponent],
+  declarations: [BaseGameComponent],
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule,
   ],
-  exports: [GameDetailComponent]
+  exports: [BaseGameComponent]
 })
 export class SharedModule { }

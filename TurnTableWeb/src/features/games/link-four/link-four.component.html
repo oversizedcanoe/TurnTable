@@ -1,29 +1,6 @@
-<h1>
-  Link Four
-</h1>
+<app-base-game [gameService]="gameService" (onNewGame)="newGame()" (onJoinGame)="joinGame()"></app-base-game>
 
-@if (gameCode == ''){
-<p>To start a new game, enter your name.</p>
-<p>To join an existing game, enter your name and the four letter game code.</p>
-<hr />
-
-<form>
-  <fieldset role="group">
-    <input type="text" name="name" placeholder="Enter your name" [(ngModel)]="playerName" />
-    <input type="submit" value="Start" (click)="onStartClicked()" [disabled]="isButtonDisabled_Start()" />
-  </fieldset>
-</form>
-<form>
-  <fieldset role="group">
-    <input type="text" name="join" placeholder="Enter a Game Code" [(ngModel)]="gameCodeToJoin" />
-    <input type="submit" value="Join" (click)="onJoinClicked()" [disabled]="isButtonDisabled_Join()" />
-  </fieldset>
-</form>
-}
-@else {
-<app-game-detail [gameState]="gameState" [playerNumber]="playerNumber"></app-game-detail>
-
-
+@if (showGame) {
 <table>
   @for(row of [].constructor(ROW_COUNT); track $index; let rowIndex = $index){
   <tr>
@@ -43,4 +20,4 @@
   </tr>
   }
 </table>
-  }
+}

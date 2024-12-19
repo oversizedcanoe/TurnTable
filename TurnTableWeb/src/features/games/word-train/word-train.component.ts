@@ -9,7 +9,6 @@ import { GameDTO } from '../../../shared/models/models';
   styleUrl: './word-train.component.css'
 })
 export class WordTrainComponent implements OnInit {
-  public gameCode: string = '';
   public readonly CHAR_COUNT: number = 8;
   public readonly WORD_COUNT: number = 6;
   public gameBoard: string[][];
@@ -26,14 +25,13 @@ export class WordTrainComponent implements OnInit {
       this.gameBoard[i] = Array<string>(this.CHAR_COUNT).fill('');
     }
 
-    const gameCode = await this.gameService.newGame(GameType.WordTrain);
-    this.gameCode = gameCode;
+    const gameCode = await this.gameService.newSinglePlayerGame();
 
     await this.updateGameState();
   }
 
   async updateGameState() {
-    const gameState: GameDTO | null = await this.gameService.getGame(this.gameCode);
+    const gameState: GameDTO | null = await this.gameService.getGame();
 
     console.warn(gameState);
 

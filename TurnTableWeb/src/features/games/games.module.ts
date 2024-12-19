@@ -15,8 +15,7 @@ import { SharedModule } from '../../shared/components/shared.module';
   imports: [
     CommonModule,
     NgxCardsComponent,
-    FormsModule,
-    SharedModule
+    SharedModule  
   ],
   exports: [ScatComponent, LinkFourComponent, TicTacNoComponent, WordTrainComponent, Game5Component],
 })

@@ -4,22 +4,41 @@ import { GameType } from '../../shared/models/enums';
 import { GameHubService } from './game-hub.service';
 import { Subject } from 'rxjs';
 import { NewGameDTO, JoinedGameDTO, GameDTO } from '../../shared/models/models';
+import { StorageService } from '../../shared/services/storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class GameService {
+  get playerName(): string | null {
+    return this.storage.username;
+  }
+
+  set playerName(name: string) {
+    this.storage.username = name;
+  }
+
+  public gameCode: string = '';
+  public playerNumber: number = 0;
+  public gameType: GameType | undefined;
+  public gameState: GameDTO | null = null;
+
   private url: string = 'game';
   public onGameStateChanged: Subject<void> = new Subject();
 
-  constructor(private backendService: BackendService, private gameHubService: GameHubService) { }
+  constructor(private backendService: BackendService, private gameHubService: GameHubService, private storage: StorageService) { }
 
-  async newGame(gameType: GameType, playerOneName?: string | null): Promise<string> {
-    var body = { gameType: gameType, playerOneName: playerOneName };
+  initialize(gameType: GameType) {
+    this.gameType = gameType;
+  }
 
-    // TODO Should there by a "new SinglePlayerGame" and a "new online multiplayer game"?
-    // There is no need for game codes or subscribing to hubs in single player...
+  isGameMultiplayer() {
+    return this.gameType != GameType.WordTrain;
+  }
+
+  async newSinglePlayerGame() {
+    var body = { gameType: this.gameType, playerOneName: null };
 
     let newGameCode: string = ''
 
@@ -27,9 +46,26 @@ export class GameService {
 
     if (result != null) {
       newGameCode = result.gameCode;
+      this.gameCode = newGameCode;
     }
 
-    await this.subscribeToHub(newGameCode);
+    return newGameCode;
+  }
+
+  async newMultiplayerGame(playerOneName: string ): Promise<string> {
+    var body = { gameType: this.gameType, playerOneName: playerOneName };
+
+    let newGameCode: string = ''
+
+    const result = await this.backendService.post<NewGameDTO>(this.url + '/new', body);
+
+    if (result != null) {
+      newGameCode = result.gameCode;
+      this.playerName = playerOneName;
+      this.playerNumber = 1;
+      this.gameCode = newGameCode;
+      await this.subscribeToHub(this.gameCode);
+    }
 
     return newGameCode;
   }
@@ -37,30 +73,37 @@ export class GameService {
   async joinGame(gameCode: string, playerName: string): Promise<number> {
     var body = { gameCode: gameCode, playerName: playerName };
 
+    let playerNumber: number = -1;
+
     const result = await this.backendService.post<JoinedGameDTO>(this.url + '/join', body);
 
     if (result) {
+      playerNumber = result.playerNumber;
+      this.gameCode = gameCode;
+      this.playerName = playerName;
+      this.playerNumber = result.playerNumber;
       await this.subscribeToHub(gameCode);
-      return result.playerNumber;
     }
-    else {
-      return -1;
-    }
+
+    return playerNumber;
   }
 
-  async getGame(gameCode: string): Promise<GameDTO | null> {
-    const result = await this.backendService.get<GameDTO>(this.url + '/' + gameCode);
-
-    if (result != null) {
-      return result;
-    }
-    else {
-      return null;
-    }
+  async getGame(): Promise<GameDTO | null> {
+    this.gameState = await this.backendService.get<GameDTO>(this.url + '/' + this.gameCode);
+    return this.gameState;
   }
 
-  async move(gameCode: string, playerNumber: number, arg1: any, arg2: any = 'NOT USED', arg3: any = 'NOT USED'): Promise<boolean> {
-    var body = { gameCode: gameCode, playerNumber: playerNumber, arg1: arg1, arg2: arg2, arg3: arg3 };
+  async move(arg1: any, arg2: any = 'NOT USED', arg3: any = 'NOT USED'): Promise<boolean> {
+    if (this.gameState?.currentPlayerTurn != this.playerNumber) {
+      alert('Wait your turn!');
+      return false;
+    }
+    if (this.gameState?.players.length == 1) {
+      alert('You need two players to play this game.')
+      return false;
+    }
+
+    var body = { gameCode: this.gameCode, playerNumber: this.playerNumber, arg1: arg1, arg2: arg2, arg3: arg3 };
 
     const result = await this.backendService.post<void>(this.url + '/move', body);
 
