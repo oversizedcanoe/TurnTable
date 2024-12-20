@@ -3,7 +3,7 @@ import { GameService } from '../../../features/games/games.service';
 import { GameType } from '../../models/enums';
 import { StorageService } from '../../services/storage.service';
 import { PlayerDTO } from '../../models/models';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-base-game',
@@ -23,7 +23,7 @@ export class BaseGameComponent implements OnInit {
   @Output() onNewGame = new EventEmitter<void>();
   @Output() onJoinGame = new EventEmitter<void>();
 
-  constructor(private storage: StorageService, private route: ActivatedRoute) {
+  constructor(private storage: StorageService, private route: ActivatedRoute, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -36,6 +36,10 @@ export class BaseGameComponent implements OnInit {
     if (gameCodeQueryParam) {
       this.gameCodeToJoin = gameCodeQueryParam;
     }
+
+    const params = { ...this.route.snapshot.queryParams };
+    delete params['gameCode'];
+    this.router.navigate([], { queryParams: params })
   }
 
   async onStartClicked() {
