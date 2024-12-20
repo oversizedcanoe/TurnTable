@@ -6,3 +6,16 @@
   content: '👉 ';
   vertical-align: baseline;
 }
+
+
+button {
+  line-height: 0.5;
+}
+
+button:hover{
+    background-color: lightblue;
+}
+
+input[type=submit]{
+    min-width: 50%;
+}

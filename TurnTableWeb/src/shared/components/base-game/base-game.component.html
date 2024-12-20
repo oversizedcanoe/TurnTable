@@ -1,20 +1,20 @@
 <h1>{{title}}</h1>
 
 @if (showLogin) {
-<p>To start a new game, enter your name.</p>
-<p>To join an existing game, enter your name and the four letter game code.</p>
+<!--<p>To start a new game, enter your name.</p>
+<p>To join an existing game, enter your name and the four letter game code.</p>-->
 <hr />
 
 <form>
   <fieldset role="group">
     <input type="text" name="name" placeholder="Enter your name" [(ngModel)]="playerName" />
-    <input type="submit" value="Start" (click)="onStartClicked()" [disabled]="isButtonDisabled_Start()" />
+    <input type="submit" value="Start New" (click)="onStartClicked()" [disabled]="isButtonDisabled_Start()" />
   </fieldset>
 </form>
 <form>
   <fieldset role="group">
     <input type="text" name="join" placeholder="Enter a Game Code" [(ngModel)]="gameCodeToJoin" />
-    <input type="submit" value="Join" (click)="onJoinClicked()" [disabled]="isButtonDisabled_Join()" />
+    <input type="submit" value="Join Existing" (click)="onJoinClicked()" [disabled]="isButtonDisabled_Join()" />
   </fieldset>
 </form>
 }
@@ -35,7 +35,7 @@
   </thead>
   <tbody>
     <tr>
-      <td>{{getGameCode()}}</td>
+      <td><button (click)="copyLink()" class="outline">{{gameCodeButtonText}}</button></td>
       <td [ngClass]="getClass(1)">{{getPlayers()[0].playerName}}</td>
       @if(getPlayers().length > 1){
       <td [ngClass]="getClass(2)">{{getPlayers()[1].playerName}}</td>
