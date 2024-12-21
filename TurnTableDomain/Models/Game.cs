@@ -45,6 +45,11 @@ namespace TurnTableDomain.Models
             throw new NotImplementedException();
         }
 
+        public virtual void Restart()
+        {
+            throw new NotImplementedException();
+        }
+
         public T DeserializeArg<T>(object jsonElement)
         {
             if (jsonElement is JsonElement element)

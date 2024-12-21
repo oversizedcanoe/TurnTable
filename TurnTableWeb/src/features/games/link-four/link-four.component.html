@@ -1,4 +1,4 @@
-<app-base-game [gameService]="gameService" (onNewGame)="newGame()" (onJoinGame)="joinGame()"></app-base-game>
+<app-base-game [gameService]="gameService" [checkForWin]="checkForWinSubject" (onNewGame)="newGame()" (onJoinGame)="joinGame()"></app-base-game>
 
 @if (showGame) {
 <table>

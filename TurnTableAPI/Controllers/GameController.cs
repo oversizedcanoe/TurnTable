@@ -41,6 +41,7 @@ namespace TurnTableAPI.Controllers
         [ServiceFilter(typeof(ValidGameCodeFilter))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<JoinedGameDTO>> Join([FromBody] JoinGameRequest request)
         {
             try
@@ -66,6 +67,25 @@ namespace TurnTableAPI.Controllers
             try
             {
                 await _gameManager.Move(request.GameCode, request.PlayerNumber, request.Arg1, request.Arg2, request.Arg3);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPost("playagain")]
+        [ServiceFilter(typeof(ValidGameCodeFilter))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> PlayAgain([FromBody] PlayAgainRequest request)
+        {
+            try
+            {
+                await _gameManager.PlayAgain(request.GameCode, request.PlayerNumber);
 
                 return Ok();
             }

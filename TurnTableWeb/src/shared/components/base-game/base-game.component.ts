@@ -4,6 +4,7 @@ import { GameType } from '../../models/enums';
 import { StorageService } from '../../services/storage.service';
 import { PlayerDTO } from '../../models/models';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-base-game',
@@ -20,6 +21,7 @@ export class BaseGameComponent implements OnInit {
   public gameCodeButtonText: string = '';
 
   @Input() gameService!: GameService;
+  @Input() checkForWin: Subject<void> = new Subject();
   @Output() onNewGame = new EventEmitter<void>();
   @Output() onJoinGame = new EventEmitter<void>();
 
@@ -40,6 +42,13 @@ export class BaseGameComponent implements OnInit {
     const params = { ...this.route.snapshot.queryParams };
     delete params['gameCode'];
     this.router.navigate([], { queryParams: params })
+
+    this.checkForWin.subscribe(() => {
+      // Short delay to ensure game board updates before showing prompt
+      setTimeout(() => {
+        this.onCheckForWin();
+      }, 150);
+    })
   }
 
   async onStartClicked() {
@@ -68,6 +77,32 @@ export class BaseGameComponent implements OnInit {
     }
 
     this.onJoinGame.next();
+  }
+
+  onCheckForWin() {
+    const gameState = this.gameService.gameState;
+
+    if (gameState == null) {
+      return;
+    }
+
+    if (gameState.playerWinner) {
+      if (gameState.playerWinner == this.gameService.playerNumber) {
+        alert(`You won 😃`)
+      } else {
+        alert(`${gameState.players.find(p => p.playerNumber == gameState.playerWinner)?.playerName} won 😞`)
+      }
+    }
+    else if (gameState.gameOver) {
+      alert('Game over');
+    }
+
+    if (confirm("Play again?")) {
+      if (this.getPlayerNumber() == 1) {
+        //start game
+      }
+
+    }
   }
 
   showGameDetailsSection(): void {
@@ -100,6 +135,10 @@ export class BaseGameComponent implements OnInit {
 
   getPlayers(): PlayerDTO[] {
     return this.gameService.gameState?.players ?? [];
+  }
+
+  getPlayerNumber(): number {
+    return this.getPlayers().filter(p => p.playerName == this.playerName)[0].playerNumber;
   }
 
   async copyLink() {

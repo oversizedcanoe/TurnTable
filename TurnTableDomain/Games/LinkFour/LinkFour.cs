@@ -16,12 +16,7 @@ namespace TurnTableDomain.Games.LinkFour
 
         public LinkFour(Player playerOne) : base(playerOne)
         {
-            for (int i = 0; i < ROW_COUNT; i++)
-            {
-                int[] row = new int[COL_COUNT];
-                Array.Fill(row, 0);
-                _gameBoard[i] = row;
-            }
+            this.InitializeGameBoard();
         }
 
         public override void NewMove(int playerNumber, object arg1, object arg2, object arg3)
@@ -29,6 +24,25 @@ namespace TurnTableDomain.Games.LinkFour
             int columnNumber = DeserializeArg<int>(arg1);
 
             ProcessMove(playerNumber, columnNumber);
+        }
+
+        public override void Restart()
+        {
+            this.SetNextPlayerTurn();
+            this.InitializeGameBoard();
+            this.GameOver = false;
+            this.PlayerWinner = null;
+            this.UpdateLastActiveDate();
+        }
+
+        private void InitializeGameBoard()
+        {
+            for (int i = 0; i < ROW_COUNT; i++)
+            {
+                int[] row = new int[COL_COUNT];
+                Array.Fill(row, 0);
+                _gameBoard[i] = row;
+            }
         }
 
         private int GetNumberAtPosition(int rowNumber, int colNumber)

@@ -54,7 +54,6 @@ namespace TurnTableDomain.Services
             return addedPlayer.PlayerNumber;
         }
 
-
         public async Task Move(string gameCode, int playerNumber, object arg1, object arg2, object arg3)
         {
             Game game = FindGame(gameCode);
@@ -81,6 +80,15 @@ namespace TurnTableDomain.Services
             Games.TryGetValue(gameCode.ToUpper(), out Game? game);
 
             return game;
+        }
+
+        public async Task PlayAgain(string gameCode, int playerNumber)
+        {
+            Game game = FindGame(gameCode);
+
+            game.Restart();
+
+            await SendGameStateChanged(gameCode);
         }
 
         private string GenerateGameCode()

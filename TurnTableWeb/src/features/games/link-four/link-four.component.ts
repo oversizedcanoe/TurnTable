@@ -3,6 +3,7 @@ import { GameService } from '../games.service';
 import { GameType } from '../../../shared/models/enums';
 import { GameDTO, PlayerDTO } from '../../../shared/models/models';
 import { StorageService } from '../../../shared/services/storage.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-link-four',
@@ -14,6 +15,7 @@ export class LinkFourComponent implements OnInit {
   public readonly COL_COUNT: number = 7;
   public gameBoard: number[][];
   public showGame = false;
+  public checkForWinSubject: Subject<void> = new Subject();
 
   constructor(public gameService: GameService) {
     this.gameService.initialize(GameType.LinkFour);
@@ -58,19 +60,6 @@ export class LinkFourComponent implements OnInit {
 
     this.gameBoard = gameState.gameState as number[][];
 
-    // Short delay to ensure game board updates before showing prompt
-    setTimeout(() => {
-      if (gameState.playerWinner) {
-        if (gameState.playerWinner == this.gameService.playerNumber) {
-          alert(`You won 😃`)
-        } else {
-          alert(`${this.gameService.gameState?.players.find(p => p.playerNumber == gameState.playerWinner)?.playerName} won 😞`)
-        }
-      }
-      else if (gameState.gameOver) {
-        alert('Game over');
-      }
-    }, 150);
-
+    this.checkForWinSubject.next();
   }
 }
