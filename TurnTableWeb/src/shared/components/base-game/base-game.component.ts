@@ -45,8 +45,8 @@ export class BaseGameComponent implements OnInit {
 
     this.checkForWin.subscribe(() => {
       // Short delay to ensure game board updates before showing prompt
-      setTimeout(() => {
-        this.onCheckForWin();
+      setTimeout(async () => {
+        await this.onCheckForWin();
       }, 150);
     })
   }
@@ -79,14 +79,17 @@ export class BaseGameComponent implements OnInit {
     this.onJoinGame.next();
   }
 
-  onCheckForWin() {
+  async onCheckForWin() {
     const gameState = this.gameService.gameState;
 
     if (gameState == null) {
       return;
     }
 
+    let gameOver = false;
+
     if (gameState.playerWinner) {
+      gameOver = true;
       if (gameState.playerWinner == this.gameService.playerNumber) {
         alert(`You won 😃`)
       } else {
@@ -95,13 +98,19 @@ export class BaseGameComponent implements OnInit {
     }
     else if (gameState.gameOver) {
       alert('Game over');
+      gameOver = true;
     }
 
-    if (confirm("Play again?")) {
-      if (this.getPlayerNumber() == 1) {
-        //start game
+    if (gameOver) {
+      if (this.getPlayerNumber() == gameState.playerWinner) {
+        if (confirm("Play again?")) {
+          //start game
+          await this.gameService.playAgain();
+        }
       }
-
+      else {
+        alert("Game will update when winner selects 'Play Again'")
+      }
     }
   }
 

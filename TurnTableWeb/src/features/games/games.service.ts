@@ -71,6 +71,8 @@ export class GameService {
   }
 
   async joinGame(gameCode: string, playerName: string): Promise<number> {
+    this.playerName = playerName;
+
     var body = { gameCode: gameCode, playerName: playerName };
 
     let playerNumber: number = -1;
@@ -80,7 +82,6 @@ export class GameService {
     if (result) {
       playerNumber = result.playerNumber;
       this.gameCode = gameCode;
-      this.playerName = playerName;
       this.playerNumber = result.playerNumber;
       await this.subscribeToHub(gameCode);
     }
@@ -118,5 +119,13 @@ export class GameService {
       console.warn("Game State Changed");
       this.onGameStateChanged.next();
     });
+  }
+
+  async playAgain() {
+    var body = { gameCode: this.gameCode, playerNumber: this.playerNumber };
+
+    const result = await this.backendService.post<void>(this.url + '/playagain', body);
+
+    return true;
   }
 }

@@ -11,7 +11,6 @@ export class BackendService {
 
   constructor(public httpClient: HttpClient) {
   }
-
      async get<T>(url: string): Promise<T | null> {
        const result$ = this.httpClient.get(this.apiUrl + url, { observe: 'response'});
        const result = await lastValueFrom(result$);
@@ -50,9 +49,12 @@ export class BackendService {
 
     if(error instanceof HttpErrorResponse){
       alert(`Sorry, an error occurred (HTTP ${error.status})`);
+      alert(JSON.stringify(error.message))
+      alert(JSON.stringify(error.statusText))
       alert(JSON.stringify(error))
     } else {
       alert('Unknown error');
+      alert(JSON.stringify(error.stack));
     }
   }
 }
