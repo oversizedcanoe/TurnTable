@@ -15,12 +15,21 @@ builder.Services.AddScoped<ValidGameCodeFilter>();
 builder.Services.AddScoped<GameHub>();
 builder.Services.AddSignalR();
 
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "AllowLocalhost",
         policy =>
         {
-            policy.WithOrigins("https://localhost:7282", "http://localhost:4200", "http://192.168.2.34:4200", "https://192.168.2.34:7282")
+            policy.WithOrigins(
+                "http://localhost:4200", "http://localhost:7282",
+                "https://localhost:4200", "https://localhost:7282",
+                "http://192.168.2.34:4200", "http://192.168.2.34:7282",
+                "https://192.168.2.34:4200", "https://192.168.2.34:7282")
             .AllowAnyHeader().AllowAnyMethod().AllowCredentials();
         });
 });
@@ -37,14 +46,10 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
 app.UseCors("AllowLocalhost");
-
+app.UseHttpsRedirection();
+app.UseAuthorization();
+app.MapControllers();
 app.MapHub<GameHub>("/gamehub");
 
 app.Run();
