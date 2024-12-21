@@ -1,6 +1,6 @@
 ﻿namespace TurnTableApplication.Requests
 {
-    public class BaseGameRequest
+    public class BaseGameRequest : BaseRequest
     {
         public string GameCode { get; set; } = string.Empty;
     }

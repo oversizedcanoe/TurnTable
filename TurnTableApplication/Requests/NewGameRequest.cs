@@ -2,7 +2,7 @@
 
 namespace TurnTableApplication.Requests
 {
-    public class NewGameRequest
+    public class NewGameRequest : BaseRequest
     {
         public GameType GameType { get; set; }
 

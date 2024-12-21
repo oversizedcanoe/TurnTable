@@ -27,6 +27,7 @@ namespace TurnTableAPI.Controllers
         {
             try
             {
+                _logger.LogDebug($"{nameof(NewGameRequest)}: {request}");
                 string gameCode = _gameManager.StartNewGame(request.GameType, request.PlayerOneName);
 
                 return Ok(new NewGameDTO(gameCode));
@@ -46,6 +47,8 @@ namespace TurnTableAPI.Controllers
         {
             try
             {
+                _logger.LogDebug($"{nameof(JoinGameRequest)}: {request}");
+
                 int playerNumber = await _gameManager.JoinGame(request.GameCode, request.PlayerName);
 
                 return Ok(new JoinedGameDTO(playerNumber));
@@ -66,6 +69,8 @@ namespace TurnTableAPI.Controllers
         {
             try
             {
+                _logger.LogDebug($"{nameof(MoveRequest)}: {request}");
+
                 await _gameManager.Move(request.GameCode, request.PlayerNumber, request.Arg1, request.Arg2, request.Arg3);
 
                 return Ok();
@@ -85,6 +90,8 @@ namespace TurnTableAPI.Controllers
         {
             try
             {
+                _logger.LogDebug($"{nameof(PlayAgainRequest)}: {request}");
+
                 await _gameManager.PlayAgain(request.GameCode, request.PlayerNumber);
 
                 return Ok();
@@ -102,6 +109,8 @@ namespace TurnTableAPI.Controllers
         {
             try
             {
+                _logger.LogDebug($"GetRequest: {gameCode}");
+
                 Game? game = _gameManager.FindGameOrDefault(gameCode);
 
                 if (game == null)
