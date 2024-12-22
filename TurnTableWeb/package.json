@@ -3,12 +3,14 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --host=0.0.0.0 --ssl",
+    "start": "ng serve --host=0.0.0.0",
+    "start https": "ng serve --host=0.0.0.0 --ssl",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "predev": "if exist .angular\\cache rmdir /s /q .angular\\cache",
-    "dev": "ng build && npm unlink ngx-cards && npm link ngx-cards && ng serve --host=0.0.0.0 --ssl"
+    "dev": "ng build && npm unlink ngx-cards && npm link ngx-cards && npm start",
+    "dev https": "ng build && npm unlink ngx-cards && npm link ngx-cards && npm start https"
   },
   "private": true,
   "dependencies": {
