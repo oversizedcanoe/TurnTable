@@ -27,6 +27,11 @@ namespace TurnTableDomain.Games.LinkFour
                 return;
             }
 
+            if (this.GameOver)
+            {
+                return;
+            }
+
             int columnNumber = DeserializeArg<int>(arg1);
 
             ProcessMove(playerNumber, columnNumber);

@@ -106,8 +106,14 @@ export class GameService {
       alert('Wait your turn!');
       return false;
     }
+
     if (this.gameState?.players.length == 1) {
       alert('You need two players to play this game.')
+      return false;
+    }
+
+    if (this.gameState?.gameOver) {
+      alert('Game is over!');
       return false;
     }
 
