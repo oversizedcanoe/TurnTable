@@ -8,6 +8,7 @@ namespace TurnTableDomain.Games.LinkFour
     {
         public override GameType GameType => GameType.LinkFour;
         public override object GameState => _gameBoard;
+        public override int MaxPlayers => 2;
 
         private const int ROW_COUNT = 6;
         private const int COL_COUNT = 7;
@@ -21,6 +22,11 @@ namespace TurnTableDomain.Games.LinkFour
 
         public override void NewMove(int playerNumber, object arg1, object arg2, object arg3)
         {
+            if (this.CurrentPlayerTurn != playerNumber)
+            {
+                return;
+            }
+
             int columnNumber = DeserializeArg<int>(arg1);
 
             ProcessMove(playerNumber, columnNumber);

@@ -47,6 +47,19 @@ namespace TurnTableDomain.Services
         {
             Game game = FindGame(gameCode);
 
+            // Allow user to "re-join" game
+            Player? player = game.Players.FirstOrDefault(p => p.Name == playerName);
+
+            if (player != null)
+            {
+                return player.PlayerNumber;
+            }
+
+            if (game.Players.Count >= game.MaxPlayers)
+            {
+                throw new Exception("Game is full!");
+            }
+
             Player addedPlayer = game.AddPlayer(playerName);
 
             await SendGameStateChanged(gameCode);
@@ -59,7 +72,7 @@ namespace TurnTableDomain.Services
             Game game = FindGame(gameCode);
 
             game.NewMove(playerNumber, arg1, arg2, arg3);
-            
+
             await SendGameStateChanged(gameCode);
         }
 

@@ -8,6 +8,7 @@ namespace TurnTableDomain.Games.LinkFour
     {
         public override GameType GameType => GameType.WordTrain;
         public override object GameState => _words;
+        public override int MaxPlayers => 1;
 
         private const int WORD_COUNT = 6;
         private const int CHAR_COUNT = 8;

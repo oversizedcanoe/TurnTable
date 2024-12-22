@@ -5,8 +5,10 @@ namespace TurnTableDomain.Models
 {
     public abstract class Game
     {
+        // Todo some of these properties should be in an Interface
         public virtual GameType GameType { get; private set; }
         public virtual object GameState { get; private set; }
+        public virtual int MaxPlayers { get; private set; }
 
         public List<Player> Players { get; private set; }
         public DateTime StartedDateTime { get; private set; }
