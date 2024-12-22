@@ -127,8 +127,6 @@ namespace TurnTableDomain.Games.LinkFour
 
         private bool CheckForWin(out int playerNumber)
         {
-            Console.Clear();
-
             for (int rowIndex = 0; rowIndex < ROW_COUNT; rowIndex++)
             {
                 for (int colIndex = 0; colIndex < COL_COUNT; colIndex++)
