@@ -12,14 +12,21 @@ import { StorageService } from '../../shared/services/storage.service';
 
 export class GameService {
   get playerName(): string | null {
-    return this.storage.username;
+    return this.storage.playerName;
   }
 
   set playerName(name: string) {
-    this.storage.username = name;
+    this.storage.playerName = name;
   }
 
-  public gameCode: string = '';
+  get gameCode(): string {
+    return this.storage.gameCode;
+  }
+
+  set gameCode(gameCode: string) {
+    this.storage.gameCode = gameCode;
+  }
+
   public playerNumber: number = 0;
   public gameType: GameType | undefined;
   public gameState: GameDTO | null = null;

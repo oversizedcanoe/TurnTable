@@ -182,4 +182,8 @@ export class BaseGameComponent implements OnInit {
     }, 3000);
 
   }
+
+  getLastPlayedGameCode(): string {
+    return this.gameService?.gameCode ?? '';
+  }
 }

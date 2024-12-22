@@ -9,12 +9,20 @@ export class StorageService {
   // local: 'forever'
   constructor() { }
 
-  get username(): string | null {
-    return localStorage.getItem('username');
+  get playerName(): string {
+    return localStorage.getItem('playerName') ?? '';
   }
 
-  set username(username: string) {
-    localStorage.setItem('username', username);
+  set playerName(playerName: string) {
+    localStorage.setItem('playerName', playerName);
+  }
+
+  get gameCode(): string {
+    return localStorage.getItem('gameCode') ?? '';
+  }
+
+  set gameCode(gameCode: string) {
+    localStorage.setItem('gameCode', gameCode);
   }
 }
 

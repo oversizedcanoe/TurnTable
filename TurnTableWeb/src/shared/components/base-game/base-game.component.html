@@ -15,6 +15,12 @@
     <input type="submit" value="Join Existing" (click)="onJoinClicked()" [disabled]="isButtonDisabled_Join()" />
   </fieldset>
 </form>
+
+@if(getLastPlayedGameCode() != ''){
+<p>Last played game: <b>{{getLastPlayedGameCode()}}</b></p>
+}
+
+<p></p>
 }
 @else if (showGameDetails) {
 <table>
