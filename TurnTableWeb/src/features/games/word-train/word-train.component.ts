@@ -67,29 +67,40 @@ export class WordTrainComponent implements OnInit {
   // Mobile: Enter is nothing
   // Mobile: Backspace is keydown, keyup
 
-  // for letters only
+  // for letters on mobile and desktop
   onInput(wordIndex: number, charIndex: number, $event: Event) {
     if ($event instanceof InputEvent && $event.data) {
       this.onLetterKeyPressed(wordIndex, charIndex, $event.data)
     }
   }
 
-  // for backspace only
+  // for backspace on mobile/desktop and enter on desktop
   keyDown(wordIndex: number, charIndex: number, $event: Event) {
-    if ($event instanceof KeyboardEvent && $event.key == 'Backspace') {
-      this.onBackspacePressed(wordIndex, charIndex);
-    }
+    console.warn($event);
+    if ($event instanceof KeyboardEvent) {
+      if ($event.key == 'Backspace') {
+        this.onBackspacePressed(wordIndex, charIndex);
+      }
+
+      // only works on desktop
+      if ($event.key == 'Enter') {
+        this.onEnterPressed(wordIndex, charIndex);
+      }
+    } 
   }
 
-  // for enter only
+  // for enter on mobile only
   focusOut(wordIndex: number, charIndex: number, $event: Event) {
     // NOTE:
     // I think this is the best way for Mobile and Desktop to capture Enter
     // However as long as there is an alert here this will loop forever (focus out occurs,
     // alert is shown, which loses focus, so alert is shown, which loses focus...)
 
-    //alert('focusOut')
-    console.warn($event);
+    const isMobile = true;
+
+    if (isMobile) {
+      this.onEnterPressed(wordIndex, charIndex);
+    }
   }
 
   onLetterKeyPressed(wordIndex: number, charIndex: number, key: string) {
