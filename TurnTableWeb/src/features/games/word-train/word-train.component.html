@@ -7,10 +7,8 @@
         <input maxlength="1" autocomplete="off" type="text" 
                [disabled]="isRowDisabled(wordIndex)"
                value="{{gameBoard[wordIndex][charIndex]}}"
-               (input)="onInput(wordIndex, charIndex, $event)"
                (keydown)="keyDown(wordIndex, charIndex, $event)"
-               (keypress)="keyPress(wordIndex, charIndex, $event)"
-               (keyup)="keyUp(wordIndex, charIndex, $event)"
+               (input)="onInput(wordIndex, charIndex, $event)"
                (focusout)="focusOut(wordIndex, charIndex, $event)"
                id="input{{wordIndex}}-{{charIndex}}"/>
       </td>

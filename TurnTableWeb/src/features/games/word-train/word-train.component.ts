@@ -67,30 +67,28 @@ export class WordTrainComponent implements OnInit {
   // Mobile: Enter is nothing
   // Mobile: Backspace is keydown, keyup
 
-
+  // for letters only
   onInput(wordIndex: number, charIndex: number, $event: Event) {
-    alert('onInput')
-    console.warn($event);
+    if ($event instanceof InputEvent && $event.data) {
+      this.onLetterKeyPressed(wordIndex, charIndex, $event.data)
+    }
   }
+
+  // for backspace only
   keyDown(wordIndex: number, charIndex: number, $event: Event) {
-    alert('keyDown')
-    console.warn($event);
+    if ($event instanceof KeyboardEvent && $event.key == 'Backspace') {
+      this.onBackspacePressed(wordIndex, charIndex);
+    }
   }
-  keyUp(wordIndex: number, charIndex: number, $event: Event) {
-    alert('keyUp')
-    console.warn($event);
-  }
-  keyPress(wordIndex: number, charIndex: number, $event: Event) {
-    alert('keyPress')
-    console.warn($event);
-  }
+
+  // for enter only
   focusOut(wordIndex: number, charIndex: number, $event: Event) {
     // NOTE:
     // I think this is the best way for Mobile and Desktop to capture Enter
     // However as long as there is an alert here this will loop forever (focus out occurs,
     // alert is shown, which loses focus, so alert is shown, which loses focus...)
 
-    alert('focusOut')
+    //alert('focusOut')
     console.warn($event);
   }
 
@@ -98,6 +96,15 @@ export class WordTrainComponent implements OnInit {
     const upperCaseKey = key.toUpperCase();
 
     if (this.allowedKeys.indexOf(upperCaseKey) == -1) {
+      console.warn('bad');
+
+      const input = document.getElementById(`input${wordIndex}-${charIndex + 1}`);
+
+      if (input) {
+        input.textContent = ''
+      }
+
+      console.warn(this.gameBoard[wordIndex][charIndex]);
       return;
     }
 
@@ -107,7 +114,6 @@ export class WordTrainComponent implements OnInit {
     if (charIndex < this.CHAR_COUNT) {
       document.getElementById(`input${wordIndex}-${charIndex + 1}`)?.focus();
     }
-
   }
 
   onEnterPressed(wordIndex: number, charIndex: number) {
@@ -115,8 +121,6 @@ export class WordTrainComponent implements OnInit {
   }
 
   onBackspacePressed(wordIndex: number, charIndex: number) {
-    alert('Backspace pressed')
-
     if (this.gameBoard[wordIndex][charIndex] == '') {
       this.gameBoard[wordIndex][charIndex - 1] = '';
 
