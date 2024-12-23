@@ -30,7 +30,6 @@ export class LinkFourComponent implements OnInit {
     for (let i = 0; i < this.ROW_COUNT; i++) {
       this.gameBoard[i] = Array<number>(this.COL_COUNT).fill(0);
     }
-
   }
 
   async newGame() {

@@ -12,11 +12,13 @@ export class WordTrainComponent implements OnInit {
   public readonly CHAR_COUNT: number = 8;
   public readonly WORD_COUNT: number = 6;
   public gameBoard: string[][];
-  private allowedKeys: string = 'abcdefghijklmnopqrstuvwxyz';
+  private allowedKeys: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   private correctWordCount: number = 1;
   private words: string[] = [];
 
   constructor(private gameService: GameService) {
+    this.gameService.initialize(GameType.WordTrain);
+
     this.gameBoard = [];
   }
 
@@ -45,41 +47,6 @@ export class WordTrainComponent implements OnInit {
     this.testSetWord(this.words[0], 0);
   }
 
-  onInput(wordIndex: number, charIndex: number, $event: Event) {
-    $event.preventDefault();
-    alert('something')
-
-    if ($event instanceof InputEvent == false) {
-      alert('Not an InputEvent?')
-      return;
-    }
-
-    const key: string | null = $event.data;
-
-    if (key == null || this.allowedKeys.indexOf(key) == -1) {
-      return;
-    }
-
-    const upperCaseKey = key.toUpperCase();
-    this.gameBoard[wordIndex][charIndex] = upperCaseKey;
-
-    if (charIndex < this.CHAR_COUNT) {
-      document.getElementById(`input${wordIndex}-${charIndex + 1}`)?.focus();
-    }
-    //else if (key == 'Enter') {
-    //  alert('Enter pressed');
-    //}
-    //else if (key == 'Backspace') {
-    //  if (this.gameBoard[wordIndex][charIndex] == '') {
-    //    this.gameBoard[wordIndex][charIndex - 1] = '';
-
-    //    if (charIndex > 0) {
-    //      document.getElementById(`input${wordIndex}-${charIndex - 1}`)?.focus();
-    //    }
-    //  }
-    //}
-  }
-
   isRowDisabled(wordIndex: number) {
     // only enable if this index is this.correctWordCount
     const isEnabled = wordIndex == this.correctWordCount
@@ -89,6 +56,73 @@ export class WordTrainComponent implements OnInit {
   testSetWord(word: string, wordIndex: number) {
     for (let i = 0; i < word.length; i++) {
       this.gameBoard[wordIndex][i] = word[i].toUpperCase();
+    }
+  }
+
+  // Desktop: Letter is keydown, keyPress, oninput
+  // Desktop: Enter is keydown, keyPress
+  // Desktop: Backspace is keydown
+
+  // Mobile: Letter is keydown, oninput, keyup
+  // Mobile: Enter is nothing
+  // Mobile: Backspace is keydown, keyup
+
+
+  onInput(wordIndex: number, charIndex: number, $event: Event) {
+    alert('onInput')
+    console.warn($event);
+  }
+  keyDown(wordIndex: number, charIndex: number, $event: Event) {
+    alert('keyDown')
+    console.warn($event);
+  }
+  keyUp(wordIndex: number, charIndex: number, $event: Event) {
+    alert('keyUp')
+    console.warn($event);
+  }
+  keyPress(wordIndex: number, charIndex: number, $event: Event) {
+    alert('keyPress')
+    console.warn($event);
+  }
+  focusOut(wordIndex: number, charIndex: number, $event: Event) {
+    // NOTE:
+    // I think this is the best way for Mobile and Desktop to capture Enter
+    // However as long as there is an alert here this will loop forever (focus out occurs,
+    // alert is shown, which loses focus, so alert is shown, which loses focus...)
+
+    alert('focusOut')
+    console.warn($event);
+  }
+
+  onLetterKeyPressed(wordIndex: number, charIndex: number, key: string) {
+    const upperCaseKey = key.toUpperCase();
+
+    if (this.allowedKeys.indexOf(upperCaseKey) == -1) {
+      return;
+    }
+
+    this.gameBoard[wordIndex][charIndex] = upperCaseKey;
+
+    // Select next input
+    if (charIndex < this.CHAR_COUNT) {
+      document.getElementById(`input${wordIndex}-${charIndex + 1}`)?.focus();
+    }
+
+  }
+
+  onEnterPressed(wordIndex: number, charIndex: number) {
+    alert('Enter pressed');
+  }
+
+  onBackspacePressed(wordIndex: number, charIndex: number) {
+    alert('Backspace pressed')
+
+    if (this.gameBoard[wordIndex][charIndex] == '') {
+      this.gameBoard[wordIndex][charIndex - 1] = '';
+
+      if (charIndex > 0) {
+        document.getElementById(`input${wordIndex}-${charIndex - 1}`)?.focus();
+      }
     }
   }
 }

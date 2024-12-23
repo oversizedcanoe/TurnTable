@@ -45,7 +45,7 @@ export class GameService {
   }
 
   async newSinglePlayerGame() {
-    var body = { gameType: this.gameType, playerOneName: null };
+    var body = { gameType: this.gameType, playerOneName: 'singleplayer' };
 
     let newGameCode: string = ''
 
