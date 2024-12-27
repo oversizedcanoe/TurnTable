@@ -35,7 +35,7 @@ table {
   }
 }
 
-input {
+#gameboard input {
   text-transform: capitalize;
   height: 100%;
   margin: 0;
@@ -46,6 +46,17 @@ input {
   color: black;
 }
 
-input:disabled{
+
+  #gameboard input:disabled {
     background-color: lightgray;
+  }
+
+
+
+.keyboardWrapper {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
 }
+

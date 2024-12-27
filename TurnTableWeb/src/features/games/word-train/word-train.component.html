@@ -1,19 +1,30 @@
-<table>
+<table id="gameboard">
   <tbody>
     @for(row of [].constructor(WORD_COUNT); track $index; let wordIndex = $index){
     <tr>
       @for(char of [].constructor(CHAR_COUNT); track $index; let charIndex = $index){
       <td>
-        <input maxlength="1" autocomplete="off" type="text" 
+        <input maxlength="1" autocomplete="off" type="text"
                [disabled]="isRowDisabled(wordIndex)"
                value="{{gameBoard[wordIndex][charIndex]}}"
+               inputmode="none"
                (keydown)="keyDown(wordIndex, charIndex, $event)"
-               (input)="onInput(wordIndex, charIndex, $event)"
-               (focusout)="focusOut(wordIndex, charIndex, $event)"
-               id="input{{wordIndex}}-{{charIndex}}"/>
+               (focus)="onFocus($event)"
+               id="input{{wordIndex}}-{{charIndex}}"
+               attr.data-wordIndex="{{wordIndex}}"
+               attr.data-charIndex="{{charIndex}}"/>
       </td>
       }
     </tr>
     }
   </tbody>
 </table>
+
+<p>{{test}}</p>
+
+@if(isMobile){
+<div class="keyboardWrapper">
+  <div class="simple-keyboard"></div>
+</div>
+}
+

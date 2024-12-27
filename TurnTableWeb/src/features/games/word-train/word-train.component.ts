@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { GameService } from '../games.service';
 import { GameType } from '../../../shared/models/enums';
 import { GameDTO } from '../../../shared/models/models';
+import Keyboard from 'simple-keyboard'
+import 'simple-keyboard/build/css/index.css';
 
 @Component({
   selector: 'app-word-train',
@@ -15,14 +17,26 @@ export class WordTrainComponent implements OnInit {
   private allowedKeys: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   private correctWordCount: number = 1;
   private words: string[] = [];
+  public keyboard!: Keyboard;
+  public isMobile: boolean = false;
+  private readonly ENTER_KEY = 'enter'
+  private readonly BACKSPACE_KEY = 'backspace'
+  private focusedWordIndex: number = 1;
+  private focusedCharIndex: number = 0;
+
+  public test: string = '';
 
   constructor(private gameService: GameService) {
     this.gameService.initialize(GameType.WordTrain);
-
     this.gameBoard = [];
   }
 
   async ngOnInit(): Promise<void> {
+    this.isMobile = /Android|webOS|Windows|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+    this.focusInput(this.focusedWordIndex, this.focusedCharIndex);
+    this.initializeKeyboard();
+
     for (let i = 0; i < this.WORD_COUNT; i++) {
       this.gameBoard[i] = Array<string>(this.CHAR_COUNT).fill('');
     }
@@ -35,8 +49,6 @@ export class WordTrainComponent implements OnInit {
   async updateGameState() {
     const gameState: GameDTO | null = await this.gameService.getGame();
 
-    console.warn(gameState);
-
     if (gameState == null) {
       alert('Failed to get game state, try refreshing');
       return;
@@ -45,6 +57,31 @@ export class WordTrainComponent implements OnInit {
     this.words = gameState.gameState as string[];
 
     this.testSetWord(this.words[0], 0);
+  }
+
+  initializeKeyboard() {
+    if (this.isMobile) {
+      setTimeout(() => {
+        this.keyboard = new Keyboard({
+          onKeyPress: key => this.onMobileKeyPress(key),
+          mergeDisplay: true,
+          layoutName: "shift",
+          layout: {
+            shift: [
+              "Q W E R T Y U I O P",
+              "A S D F G H J K L",
+              "{backspace} Z X C V B N M {backspace}",
+              "{enter}"
+            ],
+          },
+          display: {
+            "{enter}": "Enter",
+            "{backspace}": "⌫",
+          }
+        });
+      }, 100);
+    }
+
   }
 
   isRowDisabled(wordIndex: number) {
@@ -63,43 +100,20 @@ export class WordTrainComponent implements OnInit {
   // Desktop: Enter is keydown, keyPress
   // Desktop: Backspace is keydown
 
-  // Mobile: Letter is keydown, oninput, keyup
-  // Mobile: Enter is nothing
-  // Mobile: Backspace is keydown, keyup
-
-  // for letters on mobile and desktop
-  onInput(wordIndex: number, charIndex: number, $event: Event) {
-    if ($event instanceof InputEvent && $event.data) {
-      this.onLetterKeyPressed(wordIndex, charIndex, $event.data)
-    }
-  }
-
-  // for backspace on mobile/desktop and enter on desktop
   keyDown(wordIndex: number, charIndex: number, $event: Event) {
-    console.warn($event);
+    $event.preventDefault();
+
     if ($event instanceof KeyboardEvent) {
-      if ($event.key == 'Backspace') {
+      const key = $event.key;
+      if (key == 'Backspace') {
         this.onBackspacePressed(wordIndex, charIndex);
       }
-
-      // only works on desktop
-      if ($event.key == 'Enter') {
+      else if (key == 'Enter') {
         this.onEnterPressed(wordIndex, charIndex);
       }
-    } 
-  }
-
-  // for enter on mobile only
-  focusOut(wordIndex: number, charIndex: number, $event: Event) {
-    // NOTE:
-    // I think this is the best way for Mobile and Desktop to capture Enter
-    // However as long as there is an alert here this will loop forever (focus out occurs,
-    // alert is shown, which loses focus, so alert is shown, which loses focus...)
-
-    const isMobile = true;
-
-    if (isMobile) {
-      this.onEnterPressed(wordIndex, charIndex);
+      else {
+        this.onLetterKeyPressed(wordIndex, charIndex, key);
+      }
     }
   }
 
@@ -123,12 +137,17 @@ export class WordTrainComponent implements OnInit {
 
     // Select next input
     if (charIndex < this.CHAR_COUNT) {
-      document.getElementById(`input${wordIndex}-${charIndex + 1}`)?.focus();
+      this.focusInput(wordIndex, charIndex + 1);
     }
   }
 
   onEnterPressed(wordIndex: number, charIndex: number) {
-    alert('Enter pressed');
+    const currentWord = (this.gameBoard[wordIndex]).join('');
+
+
+    this.test += ('|' + currentWord + '|');
+
+    this.focusInput(this.focusedWordIndex, this.focusedCharIndex);
   }
 
   onBackspacePressed(wordIndex: number, charIndex: number) {
@@ -136,8 +155,37 @@ export class WordTrainComponent implements OnInit {
       this.gameBoard[wordIndex][charIndex - 1] = '';
 
       if (charIndex > 0) {
-        document.getElementById(`input${wordIndex}-${charIndex - 1}`)?.focus();
+        this.focusInput(wordIndex, charIndex - 1);
       }
     }
+  }
+
+  onFocus($event: FocusEvent) {
+    const target = $event.target;
+
+    if (target == null || target instanceof Element == false) {
+      return;
+    }
+
+    this.focusedWordIndex = Number(target.getAttribute('data-wordIndex'));
+    this.focusedCharIndex = Number(target.getAttribute('data-charIndex'));
+  }
+
+  onMobileKeyPress(key: string) {
+    if (key.indexOf(this.BACKSPACE_KEY) > -1) {
+      this.onBackspacePressed(this.focusedWordIndex, this.focusedCharIndex);
+    }
+    else if (key.indexOf(this.ENTER_KEY) > -1) {
+      this.onEnterPressed(this.focusedWordIndex, this.focusedCharIndex);
+    }
+    else {
+      this.onLetterKeyPressed(this.focusedWordIndex, this.focusedCharIndex, key);
+    }
+  }
+
+  focusInput(wordIndex: number, charIndex: number) {
+    setTimeout(() => {
+      document.getElementById(`input${wordIndex}-${charIndex}`)?.focus();
+    }, 100);
   }
 }
