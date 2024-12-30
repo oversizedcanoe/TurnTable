@@ -1,3 +1,15 @@
+<h1>WordTrain 🚂</h1>
+<div class="instructions">
+  <div>
+    <p class="inline">Current word guesses: {{guessedWords.join(', ')}}</p>
+    <button class="inline" (click)="showHelp()">Help</button>
+  </div>
+  <div style="padding-top: 1rem;">
+    <p class="inline">Hints taken: {{hintsTakenCount}}</p>
+    <button class="inline" (click)="showHint()">Hint</button>
+  </div>
+  </div>
+
 <table id="gameboard">
   <tbody>
     @for(row of [].constructor(WORD_COUNT); track $index; let wordIndex = $index){
@@ -12,15 +24,13 @@
                (focus)="onFocus($event)"
                id="input{{wordIndex}}-{{charIndex}}"
                attr.data-wordIndex="{{wordIndex}}"
-               attr.data-charIndex="{{charIndex}}"/>
+               attr.data-charIndex="{{charIndex}}" />
       </td>
       }
     </tr>
     }
   </tbody>
 </table>
-
-<p>{{test}}</p>
 
 @if(isMobile){
 <div class="keyboardWrapper">

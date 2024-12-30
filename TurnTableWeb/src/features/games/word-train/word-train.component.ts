@@ -23,8 +23,9 @@ export class WordTrainComponent implements OnInit {
   private readonly BACKSPACE_KEY = 'backspace'
   private focusedWordIndex: number = 1;
   private focusedCharIndex: number = 0;
-
-  public test: string = '';
+  public guessedWords: string[] = [];
+  public hintsTakenCount: number = 0;
+  public incorrectGuessesCount: number = 0;
 
   constructor(private gameService: GameService) {
     this.gameService.initialize(GameType.WordTrain);
@@ -32,7 +33,7 @@ export class WordTrainComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.isMobile = /Android|webOS|Windows|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
     this.focusInput(this.focusedWordIndex, this.focusedCharIndex);
     this.initializeKeyboard();
@@ -56,7 +57,7 @@ export class WordTrainComponent implements OnInit {
 
     this.words = gameState.gameState as string[];
 
-    this.testSetWord(this.words[0], 0);
+    this.setWord(this.words[0], 0);
   }
 
   initializeKeyboard() {
@@ -90,7 +91,13 @@ export class WordTrainComponent implements OnInit {
     return !isEnabled;
   }
 
-  testSetWord(word: string, wordIndex: number) {
+  clearWord(wordIndex: number) {
+    for (let i = 0; i < this.CHAR_COUNT; i++) {
+      this.gameBoard[wordIndex][i] = '';
+    }
+  }
+
+  setWord(word: string, wordIndex: number) {
     for (let i = 0; i < word.length; i++) {
       this.gameBoard[wordIndex][i] = word[i].toUpperCase();
     }
@@ -141,15 +148,6 @@ export class WordTrainComponent implements OnInit {
     }
   }
 
-  onEnterPressed(wordIndex: number, charIndex: number) {
-    const currentWord = (this.gameBoard[wordIndex]).join('');
-
-
-    this.test += ('|' + currentWord + '|');
-
-    this.focusInput(this.focusedWordIndex, this.focusedCharIndex);
-  }
-
   onBackspacePressed(wordIndex: number, charIndex: number) {
     if (this.gameBoard[wordIndex][charIndex] == '') {
       this.gameBoard[wordIndex][charIndex - 1] = '';
@@ -186,6 +184,39 @@ export class WordTrainComponent implements OnInit {
   focusInput(wordIndex: number, charIndex: number) {
     setTimeout(() => {
       document.getElementById(`input${wordIndex}-${charIndex}`)?.focus();
-    }, 100);
+    }, 50);
+  }
+
+  onEnterPressed(wordIndex: number, charIndex: number) {
+    const currentWord = (this.gameBoard[wordIndex]).join('');
+
+    if (this.words[wordIndex] == currentWord) {
+      this.handleWordGuessedCorrectly();}
+    else {
+      this.guessedWords.push(currentWord);
+      this.clearWord(wordIndex);
+      this.focusInput(wordIndex, 0);
+    }
+  }
+
+  handleWordGuessedCorrectly() {
+    this.correctWordCount += 1;
+    this.guessedWords = [];
+
+    if (this.words.length == this.correctWordCount) {
+      alert('Nice job!🎉');
+    }
+    else {
+      this.focusInput(this.correctWordCount, 0);
+    }
+  }
+
+  showHelp() {
+    alert("Guess the next word. Words can be part of a common phrase ('good', 'morning' = 'Good Morning')" +
+    " or part of a single word('bar', 'bell' = 'Barbell').")
+  }
+
+  showHint() {
+    alert('nothing');
   }
 }

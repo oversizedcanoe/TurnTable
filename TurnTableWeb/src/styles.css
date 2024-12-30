@@ -1,17 +1,14 @@
 header {
     background-color: rebeccapurple;
-    height: 10%;
     text-align: center;
-    padding: 1%;
+    height: 3rem;
 }
 
-body {
+html {
     background-color: mediumpurple;
 }
 
 main {
-    background-color: mediumpurple;
-    height: auto;
     padding: 2rem;
 }
 
@@ -30,4 +27,8 @@ h5,
 h6,
 p {
     color: ghostwhite;
+}
+
+button {
+  line-height: 0.5;
 }

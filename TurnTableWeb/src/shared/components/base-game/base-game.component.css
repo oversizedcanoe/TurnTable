@@ -7,11 +7,6 @@
   vertical-align: baseline;
 }
 
-
-button {
-  line-height: 0.5;
-}
-
 button:hover{
     background-color: lightblue;
 }
