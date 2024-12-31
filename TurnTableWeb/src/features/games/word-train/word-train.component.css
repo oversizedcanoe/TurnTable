@@ -1,4 +1,4 @@
-td {
+td.gameCell {
   border: 1px solid black;
   text-align: center;
   background-color: aliceblue;
@@ -18,7 +18,7 @@ td {
   }
 }
 
-table {
+#gameBoard {
   max-width: 100%;
   margin: 0 auto;
 
@@ -35,7 +35,7 @@ table {
   }
 }
 
-#gameboard input {
+#gameBoard input {
   text-transform: capitalize;
   height: 100%;
   margin: 0;
@@ -46,7 +46,7 @@ table {
   color: black;
 }
 
-#gameboard input:disabled {
+#gameBoard input:disabled {
   background-color: lightgray;
 }
 
@@ -55,17 +55,6 @@ table {
   left: 0;
   bottom: 0;
   width: 100%;
-}
-
-.inline {
-    display: inline;
-}
-
-.instructions{
-    padding-bottom: 1rem;
-}
-
-.centered {
 }
 
 button {

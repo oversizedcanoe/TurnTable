@@ -33,7 +33,7 @@ export class WordTrainComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    this.isMobile = /Android|webOS|Windows|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
     this.focusInput(this.focusedWordIndex, this.focusedCharIndex);
     this.initializeKeyboard();

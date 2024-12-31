@@ -1,21 +1,22 @@
-<h1>WordTrain 🚂</h1>
-<div class="instructions">
-  <div>
-    <p class="inline">Current word guesses: {{guessedWords.join(', ')}}</p>
-    <button class="inline" (click)="showHelp()">Help</button>
-  </div>
-  <div style="padding-top: 1rem;">
-    <p class="inline">Hints taken: {{hintsTakenCount}}</p>
-    <button class="inline" (click)="showHint()">Hint</button>
-  </div>
-  </div>
+<h1 style="display:inline">WordTrain</h1><span style="float: right">ℹ</span>
+<hr />
+<table>
+  <tr>
+    <td>Current word guesses: {{guessedWords.join(', ')}}</td>
+    <td><button class="inline" (click)="showHelp()">Help</button></td>
+  </tr>
+  <tr>
+    <td>Hints taken: {{hintsTakenCount}}</td>
+    <td><button class="inline" (click)="showHint()">Hint</button></td>
+  </tr>
+</table>
 
-<table id="gameboard">
+<table id="gameBoard">
   <tbody>
     @for(row of [].constructor(WORD_COUNT); track $index; let wordIndex = $index){
     <tr>
       @for(char of [].constructor(CHAR_COUNT); track $index; let charIndex = $index){
-      <td>
+      <td class="gameCell">
         <input maxlength="1" autocomplete="off" type="text"
                [disabled]="isRowDisabled(wordIndex)"
                value="{{gameBoard[wordIndex][charIndex]}}"
