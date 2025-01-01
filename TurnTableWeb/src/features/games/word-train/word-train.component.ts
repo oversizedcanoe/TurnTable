@@ -190,12 +190,19 @@ export class WordTrainComponent implements OnInit {
   onEnterPressed(wordIndex: number, charIndex: number) {
     const currentWord = (this.gameBoard[wordIndex]).join('');
 
+
     if (this.words[wordIndex] == currentWord) {
-      this.handleWordGuessedCorrectly();}
+      this.handleWordGuessedCorrectly();
+    }
     else {
-      this.guessedWords.push(currentWord);
+      // word is wrong
       this.clearWord(wordIndex);
       this.focusInput(wordIndex, 0);
+      if (this.guessedWords.indexOf(currentWord) == -1) {
+        // not yet guessed
+        this.incorrectGuessesCount += 1;
+        this.guessedWords.push(currentWord);
+      }
     }
   }
 
@@ -213,7 +220,7 @@ export class WordTrainComponent implements OnInit {
 
   showHelp() {
     alert("Guess the next word. Words can be part of a common phrase ('good', 'morning' = 'Good Morning')" +
-    " or part of a single word('bar', 'bell' = 'Barbell').")
+      " or part of a single word('bar', 'bell' = 'Barbell').")
   }
 
   showHint() {

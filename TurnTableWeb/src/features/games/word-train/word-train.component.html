@@ -1,16 +1,17 @@
-<h1 style="display:inline">WordTrain</h1><span style="float: right">ℹ</span>
+<h1 style="display:inline">WordTrain</h1><span style="float: right" (click)="showHelp()">ℹ</span>
 <hr />
 <table>
   <tr>
-    <td>Current word guesses: {{guessedWords.join(', ')}}</td>
-    <td><button class="inline" (click)="showHelp()">Help</button></td>
+    <td>Hints taken:</td>
+    <td>{{hintsTakenCount}}</td>
+    <td style="text-align:center"><button (click)="showHint()">Hint</button></td>
   </tr>
   <tr>
-    <td>Hints taken: {{hintsTakenCount}}</td>
-    <td><button class="inline" (click)="showHint()">Hint</button></td>
+    <td>Wrong guesses:</td>
+    <td>{{incorrectGuessesCount}}</td>
+    <td></td>
   </tr>
 </table>
-
 <table id="gameBoard">
   <tbody>
     @for(row of [].constructor(WORD_COUNT); track $index; let wordIndex = $index){
@@ -19,14 +20,15 @@
       <td class="gameCell">
         <input maxlength="1" autocomplete="off" type="text"
                [disabled]="isRowDisabled(wordIndex)"
-               value="{{gameBoard[wordIndex][charIndex]}}"
-               inputmode="none"
-               (keydown)="keyDown(wordIndex, charIndex, $event)"
-               (focus)="onFocus($event)"
-               id="input{{wordIndex}}-{{charIndex}}"
-               attr.data-wordIndex="{{wordIndex}}"
-               attr.data-charIndex="{{charIndex}}" />
-      </td>
+               value="{{gameBoard[wordIndex][charIndex]
+      }}"
+      inputmode="none"
+      (keydown)="keyDown(wordIndex, charIndex, $event)"
+      (focus)="onFocus($event)"
+      id="input{{wordIndex}}-{{charIndex}}"
+      attr.data-wordIndex="{{wordIndex}}"
+      attr.data-charIndex="{{charIndex}}" />
+    </td>
       }
     </tr>
     }
