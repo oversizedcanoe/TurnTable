@@ -1,13 +1,32 @@
-.content{
-    margin: 0 auto;
+.content {
+  margin: 0 auto;
 
-    @media (max-width: 768px) {
-        /* Small devices*/
-        width: 95%; 
-    }
+  @media (max-width: 768px) {
+    /* Small devices*/
+    width: 95%;
+  }
 
-    @media (min-width: 768px) {
-        /* Large devices*/
-        width: 70%; 
-    }
+  @media (min-width: 768px) {
+    /* Large devices*/
+    width: 70%;
+  }
+}
+
+.titleLink {
+  text-decoration: none;
+}
+
+  .titleLink:hover {
+    text-decoration: underline;
+  }
+
+  .titleLink > h1 {
+    padding: 0;
+    margin: 0;
+  }
+
+header {
+  background-color: rebeccapurple;
+  text-align: center;
+  padding: 0.5rem 0rem 1rem 0rem;
 }
