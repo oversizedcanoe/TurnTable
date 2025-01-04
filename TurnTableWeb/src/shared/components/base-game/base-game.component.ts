@@ -57,7 +57,7 @@ export class BaseGameComponent implements OnInit {
 
     switch (this.gameService.gameType) {
       case GameType.LinkFour:
-        title = 'Link Four 🟢';
+        title = 'Link Four 🔗';
         break;
       case GameType.WordGolf:
         title = 'Word Golf ⛳';
@@ -108,31 +108,32 @@ export class BaseGameComponent implements OnInit {
       return;
     }
 
-    let gameOver = false;
+    const someoneWon: boolean = gameState.playerWinner != null;
 
-    if (gameState.playerWinner) {
-      gameOver = true;
+    if (someoneWon) {
       if (gameState.playerWinner == this.gameService.playerNumber) {
         alert(`You won 😃`)
+        if (confirm("Play again?")) {
+          //start game
+          await this.gameService.playAgain();
+        }
       } else {
         alert(`${gameState.players.find(p => p.playerNumber == gameState.playerWinner)?.playerName} won 😞`)
+        alert("Game will update when winner selects 'Play Again'")
       }
     }
     else if (gameState.gameOver) {
-      alert('Game over');
-      gameOver = true;
-    }
-
-    if (gameOver) {
-      if (this.getPlayerNumber() == gameState.playerWinner) {
+      alert('Draw 😶');
+      if (this.getPlayerNumber() == 1) {
         if (confirm("Play again?")) {
           //start game
           await this.gameService.playAgain();
         }
       }
       else {
-        alert("Game will update when winner selects 'Play Again'")
+        alert("Game will update when Player 1 selects 'Play Again'")
       }
+
     }
   }
 
@@ -151,17 +152,7 @@ export class BaseGameComponent implements OnInit {
   }
 
   getClass(playerNumber: number): string {
-    let classString = "";
-
-    if (this.gameService.gameState?.currentPlayerTurn == playerNumber) {
-      classString += " currentTurn ";
-    }
-
-    if (this.gameService.playerNumber == playerNumber) {
-      classString += " bold ";
-    }
-
-    return classString;
+    return this.gameService.gameState?.currentPlayerTurn == playerNumber ? "currentTurn" : "";
   }
 
   getPlayers(): PlayerDTO[] {

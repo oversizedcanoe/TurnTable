@@ -13,8 +13,7 @@
       <td class="gameCell">
         <input maxlength="1" autocomplete="off" type="text"
                [disabled]="isCellDisabled(wordIndex, charIndex)"
-               value="{{gameBoard[wordIndex][charIndex]
-      }}"
+               value="{{gameBoard[wordIndex][charIndex]}}"
                inputmode="none"
                (keydown)="keyDown(wordIndex, charIndex, $event)"
                (focus)="onFocus($event)"
