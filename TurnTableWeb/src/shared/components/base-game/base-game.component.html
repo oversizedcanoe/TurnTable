@@ -1,8 +1,8 @@
-<h1>{{title}}</h1>
-
-@if (showLogin) {
+<h1 class="inline">{{title}}</h1>
+<span id="info" (click)="showInfo()">ℹ️</span>
 <hr />
 
+@if (showLogin) {
 <form>
   <fieldset role="group">
     <input type="text" name="name" placeholder="Enter your name" [(ngModel)]="playerName" />
@@ -50,5 +50,4 @@
     </tr>
   </tbody>
 </table>
-
 }

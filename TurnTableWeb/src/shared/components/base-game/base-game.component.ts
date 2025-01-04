@@ -21,6 +21,7 @@ export class BaseGameComponent implements OnInit {
   public gameCodeButtonText: string = '';
 
   @Input() gameService!: GameService;
+  @Input() infoText: string = '';
   @Input() checkForWin: Subject<void> = new Subject();
   @Output() onNewGame = new EventEmitter<void>();
   @Output() onJoinGame = new EventEmitter<void>();
@@ -29,9 +30,9 @@ export class BaseGameComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.setTitle();
     this.playerName = this.gameService.playerName ?? '';
     this.showLogin = this.gameService.isGameMultiplayer();
-    this.title = GameType[this.gameService.gameType ?? -1];
 
     const gameCodeQueryParam: string | null = this.route.snapshot.queryParamMap.get('gameCode');
 
@@ -49,6 +50,27 @@ export class BaseGameComponent implements OnInit {
         await this.onCheckForWin();
       }, 150);
     })
+  }
+
+  setTitle() {
+    let title = 'Turn Table';
+
+    switch (this.gameService.gameType) {
+      case GameType.LinkFour:
+        title = 'Link Four 🟢';
+        break;
+      case GameType.WordGolf:
+        title = 'Word Golf ⛳';
+        break;
+      case GameType.Scat:
+        title = 'Scat 💥';
+        break;
+      case GameType.TicTacNo:
+        title = 'Tic Tac No ❌';
+        break;
+    }
+
+    this.title = title;;
   }
 
   async onStartClicked() {
@@ -185,5 +207,13 @@ export class BaseGameComponent implements OnInit {
 
   getLastPlayedGameCode(): string {
     return this.gameService?.gameCode ?? '';
+  }
+
+  showInfo() {
+    if (this.infoText) {
+      alert(this.infoText)
+    } else {
+      alert('No info');
+    }
   }
 }

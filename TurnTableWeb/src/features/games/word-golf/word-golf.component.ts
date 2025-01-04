@@ -26,10 +26,14 @@ export class WordGolfComponent implements OnInit {
   public guessedWords: string[] = [];
   public score: number = 0;
   public hintedLetters: string = '';
+  public infoText: string = ''; 
 
-  constructor(private gameService: GameService) {
+  constructor(public gameService: GameService) {
     this.gameService.initialize(GameType.WordGolf);
     this.gameBoard = [];
+    this.infoText = "Complete the course in the lowest score you can by guessing the next word until the course is complete.\n\n" +
+      "Words can be part of a common phrase ('good', 'morning' = 'Good Morning') or part of a single word('bar', 'bell' = 'Barbell').\n\n" +
+      "Incorrect guess: 1pt. Hint: 3pts. Par: 5.";
   }
 
   async ngOnInit(): Promise<void> {
@@ -227,14 +231,6 @@ export class WordGolfComponent implements OnInit {
     else {
       this.focusInput(this.correctWordCount, 0);
     }
-  }
-
-  showHelp() {
-    const string = "Complete the course in the lowest score you can by guessing the next word until the course is complete.\n\n" +
-      "Words can be part of a common phrase ('good', 'morning' = 'Good Morning') or part of a single word('bar', 'bell' = 'Barbell').\n\n" +
-      "Incorrect guess: 1pt. Hint: 3pts. Par: 5.";
-
-    alert(string);
   }
 
   showHint() {

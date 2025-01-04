@@ -7,10 +7,14 @@
   vertical-align: baseline;
 }
 
-button:hover{
-    background-color: lightblue;
+input[type=submit] {
+  min-width: 50%;
 }
 
-input[type=submit]{
-    min-width: 50%;
+#info {
+  float: right;
 }
+
+  #info:hover {
+    text-shadow: 2px 2px 2px black;
+  }

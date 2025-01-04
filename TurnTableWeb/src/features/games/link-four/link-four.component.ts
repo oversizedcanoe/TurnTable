@@ -16,6 +16,7 @@ export class LinkFourComponent implements OnInit {
   public gameBoard: number[][];
   public showGame = false;
   public checkForWinSubject: Subject<void> = new Subject();
+  public infoText: string = '';
 
   constructor(public gameService: GameService) {
     this.gameService.initialize(GameType.LinkFour);
@@ -24,6 +25,8 @@ export class LinkFourComponent implements OnInit {
     gameService.onGameStateChanged.subscribe(async () => {
       await this.updateGameState();
     })
+
+    this.infoText = 'Be the first player to get four tokens linked in a row—horizonal, vertical, or diagonal.';
   }
 
   ngOnInit(): void {
