@@ -126,7 +126,6 @@ export class WordGolfComponent implements OnInit {
     if ($event instanceof KeyboardEvent) {
       const key = $event.key;
 
-      alert(key);
       if (key == 'Backspace') {
         this.onBackspacePressed(wordIndex, charIndex);
       }

@@ -64,7 +64,7 @@ namespace TurnTableDomain.Games.LinkFour
                 ["BRAIN", "STORM", "CLOUD", "COVER", "STORY", "TIME"],
                 ["EARTH", "WORM", "HOLE", "UP", "SIDE", "WAYS"],
                 ["PULL", "OVER", "TIME", "MACHINE", "SHOP", "TALK"],
-                ["LIFE", "LINE", "OUT", "LOOK", "UP", "GRADE"],
+                ["LIFE", "LINE", "OUT", "LOOK", "UP", "LIFT"],
                 ["SAD", "FACE", "BOOK", "MARK", "DOWN", "LOAD"],
                 ["SLOW", "MOTION", "PICTURE", "FRAME", "WORK", "SHOP"],
                 ["UP", "GRADE", "POINT", "BLANK", "CHECK", "LIST"],
@@ -72,13 +72,14 @@ namespace TurnTableDomain.Games.LinkFour
                 ["LEFT", "TURN", "TABLE", "TOP", "FLOOR", "PLAN"],
                 ["NORTH", "POLE", "VAULT", "DOOR", "STOP", "WATCH"],
                 ["DOWN", "SOUTH", "PAW", "PRINT", "SCREEN", "SAVER"],
-                ["FINAL", "ROUND", "ABOUT", "FACE", "BOOK", "MARK"]];
-
-            // FOR SURE THING
-            // AFTER SHAVE
-            // CROSS COUNTRY
-            // HAIR SPRAY
-            // HAIR LOSS
+                ["FINAL", "ROUND", "ABOUT", "FACE", "BOOK", "MARK"],
+                ["AWE", "SOME", "WHERE", "FOR", "SURE", "THING"],
+                ["INDOOR", "VOICE", "OVER", "THERE", "AFTER", "SHAVE"],
+                ["CROSS", "COUNTRY", "FRIED", "CHICKEN", "WING", "NUT"],
+                ["SHORT", "HAIR", "SPRAY", "CHEESE", "BREAD", "MAKER"],
+                ["ALLEY", "CAT", "TAIL", "WIND", "CHILL", "OUT"],
+                ["WATER", "FRONT", "ROW", "BOAT", "HOUSE", "CALL"]
+            ];
 
             return availableWords[new Random().Next(0, availableWords.Count)];
         }
