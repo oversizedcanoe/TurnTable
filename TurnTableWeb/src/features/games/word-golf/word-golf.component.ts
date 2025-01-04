@@ -33,7 +33,7 @@ export class WordGolfComponent implements OnInit {
     this.gameBoard = [];
     this.infoText = "Complete the course in the lowest score you can by guessing the next word until the course is complete.\n\n" +
       "Words can be part of a common phrase ('good', 'morning' = 'Good Morning') or part of a single word('bar', 'bell' = 'Barbell').\n\n" +
-      "Incorrect guess: 1pt. Hint: 3pts. Par: 5.";
+      "Incorrect guess: 1pt. Hint: 3pts. Par: 15.";
   }
 
   async ngOnInit(): Promise<void> {
@@ -125,6 +125,8 @@ export class WordGolfComponent implements OnInit {
 
     if ($event instanceof KeyboardEvent) {
       const key = $event.key;
+
+      alert(key);
       if (key == 'Backspace') {
         this.onBackspacePressed(wordIndex, charIndex);
       }

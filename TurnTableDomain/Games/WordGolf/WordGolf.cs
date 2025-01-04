@@ -74,6 +74,12 @@ namespace TurnTableDomain.Games.LinkFour
                 ["DOWN", "SOUTH", "PAW", "PRINT", "SCREEN", "SAVER"],
                 ["FINAL", "ROUND", "ABOUT", "FACE", "BOOK", "MARK"]];
 
+            // FOR SURE THING
+            // AFTER SHAVE
+            // CROSS COUNTRY
+            // HAIR SPRAY
+            // HAIR LOSS
+
             return availableWords[new Random().Next(0, availableWords.Count)];
         }
     }
