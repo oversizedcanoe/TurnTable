@@ -56,3 +56,15 @@ td.gameCell {
   bottom: 0;
   width: 100%;
 }
+
+.inline {
+    display: inline;
+}
+
+.hints button {
+    float: right;
+}
+
+.hints {
+    padding-bottom: 1rem;
+}

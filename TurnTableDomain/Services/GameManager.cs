@@ -32,7 +32,7 @@ namespace TurnTableDomain.Services
                     game = new LinkFour(player);
                     break;
                 case GameType.WordTrain:
-                    game = new WordTrain(Player.SinglePlayer);
+                    game = new WordGolf(Player.SinglePlayer);
                     break;
                 default:
                     throw new Exception($"Unknown GameType passed: {gameType}");

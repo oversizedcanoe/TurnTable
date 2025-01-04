@@ -1,0 +1,37 @@
+<h1 class="inline">Word Golf</h1><span style="float: right" (click)="showHelp()">ℹ</span>
+<hr />
+
+<div class="hints">
+  <h3 class="inline">Score: {{score}}</h3>
+  <button (click)="showHint()">Hint</button>
+</div>
+
+<table id="gameBoard">
+  <tbody>
+    @for(row of [].constructor(WORD_COUNT); track $index; let wordIndex = $index){
+    <tr>
+      @for(char of [].constructor(CHAR_COUNT); track $index; let charIndex = $index){
+      <td class="gameCell">
+        <input maxlength="1" autocomplete="off" type="text"
+               [disabled]="isCellDisabled(wordIndex, charIndex)"
+               value="{{gameBoard[wordIndex][charIndex]
+      }}"
+               inputmode="none"
+               (keydown)="keyDown(wordIndex, charIndex, $event)"
+               (focus)="onFocus($event)"
+               id="input{{wordIndex}}-{{charIndex}}"
+               attr.data-wordIndex="{{wordIndex}}"
+               attr.data-charIndex="{{charIndex}}" />
+      </td>
+      }
+    </tr>
+    }
+  </tbody>
+</table>
+
+@if(isMobile){
+<div class="keyboardWrapper">
+  <div class="simple-keyboard"></div>
+</div>
+}
+

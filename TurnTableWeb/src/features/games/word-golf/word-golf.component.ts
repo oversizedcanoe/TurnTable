@@ -6,11 +6,11 @@ import Keyboard from 'simple-keyboard'
 import 'simple-keyboard/build/css/index.css';
 
 @Component({
-  selector: 'app-word-train',
-  templateUrl: './word-train.component.html',
-  styleUrl: './word-train.component.css'
+  selector: 'app-word-golf',
+  templateUrl: './word-golf.component.html',
+  styleUrl: './word-golf.component.css'
 })
-export class WordTrainComponent implements OnInit {
+export class WordGolfComponent implements OnInit {
   public readonly CHAR_COUNT: number = 8;
   public readonly WORD_COUNT: number = 6;
   public gameBoard: string[][];
@@ -24,16 +24,16 @@ export class WordTrainComponent implements OnInit {
   private focusedWordIndex: number = 1;
   private focusedCharIndex: number = 0;
   public guessedWords: string[] = [];
-  public hintsTakenCount: number = 0;
-  public incorrectGuessesCount: number = 0;
+  public score: number = 0;
+  public hintedLetters: string = '';
 
   constructor(private gameService: GameService) {
-    this.gameService.initialize(GameType.WordTrain);
+    this.gameService.initialize(GameType.WordGolf);
     this.gameBoard = [];
   }
 
   async ngOnInit(): Promise<void> {
-    this.isMobile = /Android|webOS|Windows|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
     this.focusInput(this.focusedWordIndex, this.focusedCharIndex);
     this.initializeKeyboard();
@@ -85,10 +85,19 @@ export class WordTrainComponent implements OnInit {
 
   }
 
-  isRowDisabled(wordIndex: number) {
-    // only enable if this index is this.correctWordCount
-    const isEnabled = wordIndex == this.correctWordCount
-    return !isEnabled;
+  isCellDisabled(wordIndex: number, charIndex: number) {
+    // Disable if this word index is not the correct wordIndex
+    const rowIsDisabled = wordIndex != this.correctWordCount;
+    let cellIsDisabled = false;
+
+    if (rowIsDisabled == false) {
+      // Possible that this cell is hinted, which should be disabled
+      if (this.hintedLetters.length > charIndex) {
+        cellIsDisabled = true;
+      }
+    }
+
+    return rowIsDisabled || cellIsDisabled;
   }
 
   clearWord(wordIndex: number) {
@@ -190,17 +199,19 @@ export class WordTrainComponent implements OnInit {
   onEnterPressed(wordIndex: number, charIndex: number) {
     const currentWord = (this.gameBoard[wordIndex]).join('');
 
-
     if (this.words[wordIndex] == currentWord) {
+      this.hintedLetters = '';
       this.handleWordGuessedCorrectly();
     }
     else {
       // word is wrong
       this.clearWord(wordIndex);
-      this.focusInput(wordIndex, 0);
+      this.setWord(this.hintedLetters, wordIndex);
+      this.focusInput(wordIndex, this.hintedLetters.length);
+
       if (this.guessedWords.indexOf(currentWord) == -1) {
         // not yet guessed
-        this.incorrectGuessesCount += 1;
+        this.score += 1;
         this.guessedWords.push(currentWord);
       }
     }
@@ -219,11 +230,27 @@ export class WordTrainComponent implements OnInit {
   }
 
   showHelp() {
-    alert("Guess the next word. Words can be part of a common phrase ('good', 'morning' = 'Good Morning')" +
-      " or part of a single word('bar', 'bell' = 'Barbell').")
+    alert("Guess the next word until the course is complete. Words can be part of a common phrase ('good', 'morning' = 'Good Morning')" +
+      " or part of a single word('bar', 'bell' = 'Barbell').\n\nTry to score the lowest score you can. Incorrect guess: 1pt. Hint: 3pts. Par: 5.")
   }
 
   showHint() {
-    alert('nothing');
+    this.score += 3;
+    const wordIndexForHint: number = this.correctWordCount;
+    this.clearWord(wordIndexForHint);
+    const wordForHint: string = this.words[wordIndexForHint];
+    const letterIndexForHint: number = this.hintedLetters.length;
+    const letterForHint = wordForHint[letterIndexForHint];
+
+    this.hintedLetters += letterForHint;
+    this.setWord(this.hintedLetters, wordIndexForHint);
+
+    if (this.hintedLetters == wordForHint) {
+      // Word completed with hint, simulate enter key pressed
+      this.onEnterPressed(wordIndexForHint, 0);
+    }
+    else {
+      this.focusInput(wordIndexForHint, letterIndexForHint + 1);
+    }
   }
 }

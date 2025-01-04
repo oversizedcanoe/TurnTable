@@ -1,10 +1,9 @@
-﻿using Newtonsoft.Json;
-using TurnTableBase;
+﻿using TurnTableBase;
 using TurnTableDomain.Models;
 
 namespace TurnTableDomain.Games.LinkFour
 {
-    public class WordTrain: Game
+    public class WordGolf: Game
     {
         public override GameType GameType => GameType.WordTrain;
         public override object GameState => _words;
@@ -15,7 +14,7 @@ namespace TurnTableDomain.Games.LinkFour
 
         private string[] _words = new string[WORD_COUNT];
 
-        public WordTrain(Player playerOne) : base(playerOne)
+        public WordGolf(Player playerOne) : base(playerOne)
         {
             this._words = GenerateWords();
         }

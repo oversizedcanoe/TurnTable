@@ -41,7 +41,7 @@ export class GameService {
   }
 
   isGameMultiplayer() {
-    return this.gameType != GameType.WordTrain;
+    return this.gameType != GameType.WordGolf;
   }
 
   async newSinglePlayerGame() {

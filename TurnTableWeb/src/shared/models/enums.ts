@@ -3,7 +3,7 @@ export enum GameType {
   LinkFour = 1,
   Scat = 2,
   TicTacNo = 3,
-  WordTrain = 4
+  WordGolf = 4
 }
 
 export enum MoveResultCode {
