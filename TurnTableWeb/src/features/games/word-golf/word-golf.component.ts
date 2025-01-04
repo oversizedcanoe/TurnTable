@@ -230,8 +230,11 @@ export class WordGolfComponent implements OnInit {
   }
 
   showHelp() {
-    alert("Guess the next word until the course is complete. Words can be part of a common phrase ('good', 'morning' = 'Good Morning')" +
-      " or part of a single word('bar', 'bell' = 'Barbell').\n\nTry to score the lowest score you can. Incorrect guess: 1pt. Hint: 3pts. Par: 5.")
+    const string = "Complete the course in the lowest score you can by guessing the next word until the course is complete.\n\n" +
+      "Words can be part of a common phrase ('good', 'morning' = 'Good Morning') or part of a single word('bar', 'bell' = 'Barbell').\n\n" +
+      "Incorrect guess: 1pt. Hint: 3pts. Par: 5.";
+
+    alert(string);
   }
 
   showHint() {
