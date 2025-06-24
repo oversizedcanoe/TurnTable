@@ -10,9 +10,11 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddSingleton<GameManager>();
 builder.Services.AddScoped<ValidGameCodeFilter>();
 builder.Services.AddScoped<GameHub>();
+
 builder.Services.AddSignalR();
 
 builder.Logging.ClearProviders();
