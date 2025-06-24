@@ -3,6 +3,7 @@ import { BackendService } from '../../shared/services/backend.service';
 import { GameType } from '../../shared/models/enums';
 import { HubConnectionBuilder, HubConnection, HubConnectionState } from '@microsoft/signalr';
 import { Subject } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -16,7 +17,7 @@ export class GameHubService {
 
   constructor() {
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl(BackendService.BackendUrl + GameHubService.HubUrl)
+      .withUrl(environment.apiUrl + GameHubService.HubUrl)
       .build();
 
     this.hubConnection.onclose(async () => {
