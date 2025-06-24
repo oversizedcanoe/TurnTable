@@ -42,4 +42,4 @@ testem.log
 Thumbs.db
 
 # User added
-*/environment.prod.ts
+**/environment.prod.ts
