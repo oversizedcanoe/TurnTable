@@ -3,6 +3,8 @@ A single- and multi-player game website.
 
 # To do
 ### General
+- Fix prod vs development appsettings for backend
+- Fix CORS
 - Rename title
 - Add favicon
 - Add Logging
