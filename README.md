@@ -9,7 +9,7 @@ A single- and multi-player game website.
 - Add favicon
 - Add Logging
 - Add other games, Big Bill, Ride the Bus
-
+- In game chat room?
 
 ### Games
 
